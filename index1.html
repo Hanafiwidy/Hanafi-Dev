@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="id">
+
+line 2
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hanafi Widyanto — Network &amp; Systems Engineer</title>
+<meta name="description" content="Portfolio & CV Hanafi Widyanto, Network and Systems Engineer di Jakarta, Indonesia.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   DESIGN TOKENS
+   ============================================================ */
+:root {
+  --paper:      #FAF8F3;
+  --ink:        #1C1A17;
+  --muted:      #6F6961;
+  --hairline:   #E3DED4;
+  --accent:     #B64A1E;
+
+  --serif:  "Fraunces", Georgia, serif;
+  --sans:   "Instrument Sans", "Helvetica Neue", sans-serif;
+  --mono:   "JetBrains Mono", ui-monospace, monospace;
+
+  --pad-x: clamp(20px, 5vw, 56px);
+  --max-w: 1080px;
+  --ease:  cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.65;
+  background: var(--paper);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; }
+img { display: block; max-width: 100%; }
+::selection { background: var(--accent); color: var(--paper); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* ============================================================
+   TYPE HELPERS
+   ============================================================ */
+.kicker {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.meta {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+/* ============================================================
+   NAV
+   ============================================================ */
+nav {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px var(--pad-x);
+  background: rgba(250, 248, 243, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s var(--ease);
+}
+nav.scrolled { border-bottom-color: var(--hairline); }
+
+.logo {
+  font-family: var(--mono);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+.logo em { font-style: normal; color: var(--accent); }
+
+.nav-links { display: flex; gap: 32px; }
+.nav-links a {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--ink); }
+
+.menu-btn {
+  display: none;
+  background: none;
+  border: 1px solid var(--hairline);
+  border-radius: 4px;
+  padding: 8px;
+  cursor: pointer;
+}
+.menu-btn svg { display: block; stroke: var(--ink); }
+
+/* ============================================================
+   LAYOUT
+   ============================================================ */
+section {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 var(--pad-x);
+  scroll-margin-top: 90px;
+}
+.section-pad { padding-top: 110px; padding-bottom: 110px; }
+
+/* Editorial section header: nomor + judul + garis */
+.section-head {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: baseline;
+  gap: 24px;
+  margin-bottom: 56px;
+}
+.section-head .num {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--accent);
+}
+.section-head h2 {
+  font-family: var(--serif);
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+.section-head::after {
+  content: "";
+  order: 3;
+  align-self: center;
+  height: 1px;
+  background: var(--hairline);
+}
+.section-head { grid-template-columns: auto 1fr auto; }
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero {
+  min-height: 100svh;
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  align-items: center;
+  gap: clamp(40px, 6vw, 80px);
+  padding-top: 120px;
+  padding-bottom: 60px;
+}
+.hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(44px, 7.5vw, 88px);
+  font-weight: 500;
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+  margin: 18px 0 22px;
+}
+.hero h1 em {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--accent);
+}
+.hero .lede {
+  font-size: 17px;
+  color: var(--muted);
+  max-width: 52ch;
+  margin-bottom: 36px;
+}
+
+/* Tombol */
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  align-items: center;
+}
+.btn-solid {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 500;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 14px 24px;
+  border-radius: 3px;
+  transition: background 0.25s var(--ease), transform 0.25s var(--ease);
+}
+.btn-solid:hover { background: var(--accent); transform: translateY(-2px); }
+.btn-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+  border-bottom: 1px solid var(--ink);
+  padding-bottom: 3px;
+  transition: color 0.2s, border-color 0.2s;
+}
+.btn-link:hover { color: var(--accent); border-color: var(--accent); }
+
+/* Foto — bingkai "cetakan", B&W sampai di-hover */
+.hero-figure { position: relative; padding: 0 16px 16px 0; }
+.hero-figure::after {
+  content: "";
+  position: absolute;
+  top: 16px; right: 0;
+  bottom: 0; left: 16px;
+  border: 1px solid var(--hairline);
+  z-index: 0;
+}
+.hero-figure img {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  object-position: center top;
+  filter: grayscale(1) contrast(1.05);
+  transition: filter 0.6s var(--ease);
+}
+.hero-figure img:hover { filter: grayscale(0); }
+.hero-figure figcaption {
+  position: relative;
+  z-index: 1;
+  margin-top: 14px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--muted);
+  text-align: right;
+}
+
+/* ============================================================
+   SUMMARY
+   ============================================================ */
+.summary-text {
+  font-family: var(--serif);
+  font-size: clamp(20px, 2.6vw, 26px);
+  font-weight: 400;
+  line-height: 1.55;
+  letter-spacing: -0.005em;
+  max-width: 62ch;
+}
+.summary-text strong { font-weight: 600; }
+
+/* ============================================================
+   EXPERIENCE
+   ============================================================ */
+.entry {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: clamp(24px, 4vw, 48px);
+  padding: 44px 0;
+  border-top: 1px solid var(--hairline);
+}
+.entry:last-child { border-bottom: 1px solid var(--hairline); }
+.entry-aside { display: flex; flex-direction: column; gap: 8px; }
+.entry-dates { color: var(--accent); }
+.entry-co { font-size: 14px; color: var(--muted); }
+.entry h3 {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.3;
+  margin-bottom: 18px;
+}
+.entry ul { display: grid; gap: 10px; }
+.entry li {
+  position: relative;
+  padding-left: 26px;
+  font-size: 15px;
+  color: var(--muted);
+}
+.entry li strong { color: var(--ink); font-weight: 600; }
+.entry li::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+}
+
+/* ============================================================
+   SKILLS
+   ============================================================ */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0 clamp(40px, 6vw, 80px);
+}
+.skill-item {
+  padding: 26px 0;
+  border-top: 1px solid var(--hairline);
+}
+.skill-item h3 {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+.skill-item p { font-size: 15px; color: var(--muted); }
+
+/* ============================================================
+   CERTIFICATIONS
+   ============================================================ */
+.cert {
+  display: grid;
+  grid-template-columns: 60px 1fr auto;
+  gap: 24px;
+  align-items: center;
+  padding: 26px 0;
+  border-top: 1px solid var(--hairline);
+}
+.cert:last-child { border-bottom: 1px solid var(--hairline); }
+.cert-logo {
+  width: 60px;
+  height: 60px;
+  border: 1px solid var(--hairline);
+  border-radius: 6px;
+  background: #fff;
+  display: grid;
+  place-items: center;
+}
+.cert-logo img { width: 34px; height: 34px; object-fit: contain; }
+.cert h3 {
+  font-family: var(--serif);
+  font-size: 19px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+.cert h4 {
+  font-size: 13.5px;
+  font-weight: 400;
+  color: var(--muted);
+  margin-top: 3px;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer {
+  border-top: 1px solid var(--hairline);
+  margin-top: 110px;
+}
+.footer-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 72px var(--pad-x) 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+.footer-contact h2 {
+  font-family: var(--serif);
+  font-size: clamp(28px, 4.5vw, 44px);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  margin: 10px 0 6px;
+}
+.footer-contact h2 a {
+  border-bottom: 1px solid var(--hairline);
+  transition: color 0.2s, border-color 0.2s;
+}
+.footer-contact h2 a:hover { color: var(--accent); border-color: var(--accent); }
+
+.socials {
+  display: flex;
+  gap: 20px;
+  font-family: var(--mono);
+  font-size: 13px;
+}
+.socials a {
+  color: var(--muted);
+  transition: color 0.2s;
+}
+.socials a:hover { color: var(--accent); }
+.copyright {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 24px var(--pad-x) 28px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  opacity: 0.7;
+}
+
+/* ============================================================
+   REVEAL ANIMATION
+   ============================================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+}
+.reveal.in { opacity: 1; transform: none; }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 860px) {
+  .hero {
+    grid-template-columns: 1fr;
+    align-items: start;
+    padding-top: 130px;
+    padding-bottom: 40px;
+  }
+  .hero-figure { max-width: 380px; }
+
+  .section-head {
+    grid-template-columns: auto 1fr auto;
+    gap: 16px;
+  }
+
+  .entry { grid-template-columns: 1fr; gap: 14px; padding: 36px 0; }
+
+  .skills-grid { grid-template-columns: 1fr; }
+
+  .cert { grid-template-columns: 52px 1fr; }
+  .cert-logo { width: 52px; height: 52px; }
+  .cert .meta { grid-column: 2; }
+
+  .footer-inner { flex-direction: column; align-items: flex-start; }
+}
+
+@media (max-width: 768px) {
+  .menu-btn { display: block; }
+  .nav-links {
+    position: fixed;
+    top: 65px;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    gap: 0;
+    background: var(--paper);
+    border-bottom: 1px solid var(--hairline);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s var(--ease);
+  }
+  .nav-links.active { max-height: 400px; }
+  .nav-links li { border-bottom: 1px solid var(--hairline); }
+  .nav-links li:last-child { border-bottom: none; }
+  .nav-links a { display: block; padding: 16px var(--pad-x); color: var(--ink); }
+}
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<nav id="navbar" aria-label="Navigasi utama">
+  <a class="logo" href="#home">HW<em>/</em>hanafi.widyanto</a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#summary">Summary</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#certifications">Certifications</a></li>
+    <li><a href="mailto:hanafiwidy@gmail.com">Contact</a></li>
+  </ul>
+  <button class="menu-btn" id="menuBtn" aria-label="Buka menu" aria-expanded="false" aria-controls="navLinks">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round">
+      <path d="M3 6h18M3 12h18M3 18h18"/>
+    </svg>
+  </button>
+</nav>
+
+<!-- ============ HERO ============ -->
+<header class="hero" id="home">
+  <div>
+    <p class="kicker">Network &amp; Systems Engineer</p>
+    <h1>Hanafi Widyanto<em>.</em></h1>
+    <p class="meta">Jakarta, Indonesia &nbsp;·&nbsp; hanafiwidy@gmail.com</p>
+    <p class="lede" style="margin-top:16px">
+      Network and Systems Engineer dengan pengalaman profesional lebih dari 7 tahun
+      dalam merancang, mengimplementasikan, dan merawat infrastruktur enterprise
+      yang andal.
+    </p>
+    <div class="hero-actions">
+      <a href="CV_Hanafi.pdf" class="btn-solid" download>
+        Download CV — PDF
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 3v13M6 11l6 6 6-6M4 21h16"/>
+        </svg>
+      </a>
+      <a href="#experience" class="btn-link">Lihat pengalaman &nbsp;&rarr;</a>
+    </div>
+  </div>
+
+  <figure class="hero-figure">
+    <img src="han1.jpeg"
+         alt="Portrait Hanafi Widyanto"
+         onerror="this.src='https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=900&auto=format&fit=crop'">
+    <figcaption>fig. 01 — portrait, Jakarta</figcaption>
+  </figure>
+</header>
+
+<!-- ============ SUMMARY ============ -->
+<section id="summary" class="section-pad">
+  <div class="section-head reveal">
+    <span class="num">01</span>
+    <h2>Professional Summary</h2>
+  </div>
+  <p class="summary-text reveal">
+    Dedicated Network and Systems Engineer dengan pengalaman lebih dari 7 tahun
+    dalam mendesain, mengimplementasikan, dan merawat infrastruktur enterprise
+    yang robust. <strong>JNCIA-Junos certified</strong> dengan keahlian praktis
+    mendalam di network routing &amp; security <strong>(Cisco, FortiGate, SD-WAN)</strong>
+    serta virtualisasi dan manajemen storage tingkat lanjut
+    <strong>(VMware ESXi, IBM FlashSystem)</strong>. Terampil dalam troubleshooting
+    kompleks, monitoring proaktif via <strong>Grafana</strong>, dan optimasi
+    performa sistem demi memastikan uptime maksimal serta kontinuitas operasional.
+  </p>
+</section>
+
+<!-- ============ EXPERIENCE ============ -->
+<section id="experience" class="section-pad">
+  <div class="section-head reveal">
+    <span class="num">02</span>
+    <h2>Professional Experience</h2>
+  </div>
+
+  <article class="entry reveal">
+    <div class="entry-aside">
+      <span class="meta entry-dates">Sep 2023 — Present</span>
+      <span class="meta entry-co">PT. Satkomindo Mediyasa</span>
+    </div>
+    <div>
+      <h3>Network &amp; Infrastructure Engineer — TPG (Transaction Processing Gateway SMS &amp; WABA)</h3>
+      <ul>
+        <li><strong>Infrastructure Management:</strong> Managed, monitored, and maintained High Availability (HA) for Transaction Processing Gateway (TPG) server infrastructures supporting banking SMS Blast and WhatsApp Business API (WABA) services.</li>
+        <li><strong>Network &amp; Storage Operations:</strong> Performed regular installations, configurations, and software/firmware patching for Cisco routers/switches, FortiGate Firewalls, and Pure Storage systems.</li>
+        <li><strong>Virtualization &amp; Migration:</strong> Executed physical-to-virtual (P2V) server migrations to VMware ESXi environments and seamlessly migrated Cisco server workloads.</li>
+        <li><strong>Traffic &amp; Performance Analysis:</strong> Analyzed data traffic anomalies (SMS &amp; WA) and generated monthly server capacity utilization reports to ensure strict SLA compliance.</li>
+        <li><strong>Stakeholder &amp; Compliance:</strong> Drafted technical Standard Operating Procedures (SOPs), reviewed Managed Services billing documentation, and coordinated extensively with over 100 banking users and stakeholders.</li>
+      </ul>
+    </div>
+  </article>
+
+  <article class="entry reveal">
+    <div class="entry-aside">
+      <span class="meta entry-dates">Aug 2022 — Sep 2023</span>
+      <span class="meta entry-co">PT. Satkomindo Mediyasa</span>
+    </div>
+    <div>
+      <h3>Support Engineer — Kaseya &amp; Network Automation (SolarWinds)</h3>
+      <ul>
+        <li><strong>System Health Monitoring:</strong> Monitored the reliability of Kaseya and SolarWinds server infrastructures, conducting proactive analysis to prevent CPU and memory utilization anomalies.</li>
+        <li><strong>Endpoint Troubleshooting:</strong> Performed deep-dive root-cause analysis (RCA) and resolved Kaseya agent data delivery failures on the client side.</li>
+        <li><strong>Reporting &amp; Managed Services:</strong> Compiled periodic system performance reports (daily, weekly, monthly) and produced Managed Services handover protocols as a basis for client billing verification.</li>
+      </ul>
+    </div>
+  </article>
+
+  <article class="entry reveal">
+    <div class="entry-aside">
+      <span class="meta entry-dates">Aug 2021 — Aug 2022</span>
+      <span class="meta entry-co">PT. Satkomindo Mediyasa</span>
+    </div>
+    <div>
+      <h3>NOC Application Engineer — SMS &amp; WABA</h3>
+      <ul>
+        <li><strong>Gateway Application Support:</strong> Maintained the operational reliability of TPG servers facilitating SMS Blast distribution and real-time notification systems for the mobile banking application (BRImo).</li>
+        <li><strong>Traffic &amp; Billing Analysis:</strong> Extracted, monitored, and reconciled SMS and WhatsApp traffic billing reports to drive operational cost efficiency.</li>
+        <li><strong>Client Coordination:</strong> Acted as the Single Point of Contact (SPOC) for 100+ banking users, ensuring the smooth execution and scheduling of SMS/WhatsApp Blasts.</li>
+        <li><strong>Analytic Reporting:</strong> Produced daily, weekly, and monthly analytical data reports regarding application utility metrics.</li>
+      </ul>
+    </div>
+  </article>
+
+  <article class="entry reveal">
+    <div class="entry-aside">
+      <span class="meta entry-dates">Jul 2019 — Aug 2021</span>
+      <span class="meta entry-co">PT. Satkomindo Mediyasa</span>
+    </div>
+    <div>
+      <h3>Network Operations Center (NOC) — VSAT</h3>
+      <ul>
+        <li><strong>Massive Infrastructure Monitoring:</strong> Monitored and maintained the stability of VSAT network connectivity (Hughes HX50 &amp; Jupiter systems) covering 10,000+ ATM nodes and Bank BRI branches across Indonesia.</li>
+        <li><strong>Field Dispatch &amp; Coordination:</strong> Coordinated and guided 50+ field technicians through investigation, fault isolation, and physical network repairs at remote locations.</li>
+        <li><strong>Server Maintenance:</strong> Conducted routine checks and preventive maintenance on VSAT servers and networks at the Hub side.</li>
+      </ul>
+    </div>
+  </article>
+</section>
+
+<!-- ============ SKILLS ============ -->
+<section id="skills" class="section-pad">
+  <div class="section-head reveal">
+    <span class="num">03</span>
+    <h2>Technical Skills</h2>
+  </div>
+  <div class="skills-grid">
+    <div class="skill-item reveal">
+      <h3>Network &amp; Routing Security</h3>
+      <p>Cisco, FortiGate, SD-WAN, VSAT Networks.</p>
+    </div>
+    <div class="skill-item reveal">
+      <h3>Virtualization &amp; Storage</h3>
+      <p>VMware ESXi &amp; VDI, IBM FlashSystem &amp; Pure Storage.</p>
+    </div>
+    <div class="skill-item reveal">
+      <h3>Monitoring &amp; Operations</h3>
+      <p>Grafana, SolarWinds, Network Monitoring, High Availability (HA) Management.</p>
+    </div>
+    <div class="skill-item reveal">
+      <h3>Professional Skills</h3>
+      <p>Stakeholder Communication, User Support, IT Service Management (ITSM).</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CERTIFICATIONS ============ -->
+<section id="certifications" class="section-pad">
+  <div class="section-head reveal">
+    <span class="num">04</span>
+    <h2>Certifications &amp; Education</h2>
+  </div>
+
+  <div class="cert reveal">
+    <div class="cert-logo"><img src="jncia.png" alt="Logo Juniper Networks" onerror="this.style.display='none'"></div>
+    <div>
+      <h3>Juniper Networks Certified Associate — JNCIA-Junos</h3>
+      <h4>Juniper Networks</h4>
+    </div>
+    <span class="meta">Certified</span>
+  </div>
+
+  <div class="cert reveal">
+    <div class="cert-logo"><img src="unindra.png" alt="Logo Universitas Indraprasta PGRI" onerror="this.style.display='none'"></div>
+    <div>
+      <h3>Bachelor of Informatics — S1 Teknik Informatika</h3>
+      <h4>Universitas Indraprasta PGRI</h4>
+    </div>
+    <span class="meta">2014 — 2018</span>
+  </div>
+
+  <div class="cert reveal">
+    <div class="cert-logo"><img src="optito.png" alt="Logo OPITO" onerror="this.style.display='none'"></div>
+    <div>
+      <h3>Tropical BOSIET with Compressed Air Emergency Breathing System (CA-EBS)</h3>
+      <h4>OPITO — certificate expires 10/09/2030</h4>
+    </div>
+    <span class="meta">2026 — 2030</span>
+  </div>
+
+  <div class="cert reveal">
+    <div class="cert-logo"><img src="optito.png" alt="Logo OPITO" onerror="this.style.display='none'"></div>
+    <div>
+      <h3>Travel Safely by Boat (TSbB)</h3>
+      <h4>OPITO — certificate expires 10/09/2030</h4>
+    </div>
+    <span class="meta">2026 — 2030</span>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-contact">
+      <p class="kicker">Contact</p>
+      <h2><a href="mailto:hanafiwidy@gmail.com">hanafiwidy@gmail.com</a></h2>
+      <p class="meta">Jakarta, Indonesia</p>
+    </div>
+    <div class="socials">
+      <a href="https://github.com" target="_blank" rel="noopener">GitHub &nearr;</a>
+      <a href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn &nearr;</a>
+      <a href="mailto:hanafiwidy@gmail.com">Email &nearr;</a>
+    </div>
+  </div>
+  <p class="copyright">&copy; 2026 Hanafi Widyanto. All rights reserved.</p>
+</footer>
+
+<!-- ============ SCRIPT ============ -->
+<script>
+// Border nav muncul setelah scroll
+const nav = document.getElementById('navbar');
+const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 24);
+window.addEventListener('scroll', onScroll, { passive: true });
+onScroll();
+
+// Menu mobile
+const menuBtn = document.getElementById('menuBtn');
+const navLinks = document.getElementById('navLinks');
+const closeMenu = () => {
+  navLinks.classList.remove('active');
+  menuBtn.setAttribute('aria-expanded', 'false');
+};
+menuBtn.addEventListener('click', () => {
+  const open = navLinks.classList.toggle('active');
+  menuBtn.setAttribute('aria-expanded', String(open));
+});
+navLinks.addEventListener('click', (e) => {
+  if (e.target.matches('a')) closeMenu();
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeMenu();
+});
+
+// Reveal saat elemen masuk viewport
+const io = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('in');
+      io.unobserve(entry.target);
+    }
+  });
+}, { rootMargin: '0px 0px -60px 0px', threshold: 0.05 });
+document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+</script>
+
+</body>
+</html>
