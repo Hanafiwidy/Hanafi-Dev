@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="id">
-
-line 2
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hanafi Widyanto — Network &amp; Systems Engineer</title>
 <meta name="description" content="Portfolio & CV Hanafi Widyanto, Network and Systems Engineer di Jakarta, Indonesia.">
 
+
+line 8
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -164,17 +164,19 @@ section {
    HERO
    ============================================================ */
 .hero {
+  max-width: var(--max-w);
+  margin: 0 auto;
   min-height: 100svh;
   display: grid;
   grid-template-columns: 1.15fr 0.85fr;
   align-items: center;
   gap: clamp(40px, 6vw, 80px);
-  padding-top: 120px;
-  padding-bottom: 60px;
+  padding-top: 140px;
+  padding-bottom: 80px;
 }
 .hero h1 {
   font-family: var(--serif);
-  font-size: clamp(44px, 7.5vw, 88px);
+  font-size: clamp(40px, 5.5vw, 72px);
   font-weight: 500;
   line-height: 1.02;
   letter-spacing: -0.025em;
@@ -228,7 +230,12 @@ section {
 .btn-link:hover { color: var(--accent); border-color: var(--accent); }
 
 /* Foto — bingkai "cetakan", B&W sampai di-hover */
-.hero-figure { position: relative; padding: 0 16px 16px 0; }
+.hero-figure {
+  position: relative;
+  max-width: 400px;
+  justify-self: end;
+  padding: 0 16px 16px 0;
+}
 .hero-figure::after {
   content: "";
   position: absolute;
@@ -263,9 +270,9 @@ section {
    ============================================================ */
 .summary-text {
   font-family: var(--serif);
-  font-size: clamp(20px, 2.6vw, 26px);
+  font-size: clamp(17px, 1.6vw, 19px);
   font-weight: 400;
-  line-height: 1.55;
+  line-height: 1.7;
   letter-spacing: -0.005em;
   max-width: 62ch;
 }
