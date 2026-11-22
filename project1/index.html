@@ -3,242 +3,915 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apuy Copas Copas | Engineer Dashboard</title>
+    <title>Apuy Copas Copas | NOC Engineer Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --accent:#6366F1; --accent-soft:#EEF2FF; --accent-mid:#818CF8;
-            --sidebar-bg:#0F0F14; --sidebar-border:rgba(255,255,255,0.06);
-            --sidebar-hover:rgba(255,255,255,0.06); --sidebar-active-bg:rgba(99,102,241,0.15);
-            --success:#10B981; --warning:#F59E0B; --danger:#EF4444;
-            --bg:#F5F5F7; --surface:#FFFFFF;
-            --border:rgba(0,0,0,0.07); --border-strong:rgba(0,0,0,0.12);
-            --text-1:#0A0A0F; --text-2:#52525B; --text-3:#A1A1AA;
-            --sidebar-w:252px;
-            --r-sm:8px; --r-md:12px; --r-lg:16px; --r-xl:20px;
+            --bg: #F4F4F5;
+            --surface: #FFFFFF;
+            --surface-raised: #FAFAFA;
+            --sidebar-bg: #09090B;
+            --sidebar-hover: rgba(255,255,255,0.05);
+            --sidebar-active: rgba(59,130,246,0.12);
+            --border: rgba(0,0,0,0.08);
+            --border-strong: rgba(0,0,0,0.14);
+            --text-1: #09090B;
+            --text-2: #52525B;
+            --text-3: #A1A1AA;
+            --accent: #3B82F6;
+            --accent-soft: #EFF6FF;
+            --success: #16A34A;
+            --warning: #D97706;
+            --danger: #DC2626;
+            --r-sm: 6px;
+            --r-md: 8px;
+            --r-lg: 12px;
         }
-        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-        body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text-1);display:flex;height:100vh;overflow:hidden;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;}
 
-        /* ══ SIDEBAR (desktop) ══ */
-        .sidebar{width:var(--sidebar-w);background:var(--sidebar-bg);display:flex;flex-direction:column;flex-shrink:0;border-right:1px solid var(--sidebar-border);overflow-y:auto;}
-        .sidebar::-webkit-scrollbar{width:3px;} .sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);}
-        .brand{padding:18px 16px 14px;border-bottom:1px solid var(--sidebar-border);}
-        .brand-logo{display:flex;align-items:center;gap:10px;}
-        .brand-icon{width:32px;height:32px;background:linear-gradient(135deg,#6366F1,#818CF8);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-        .brand-icon svg{width:16px;height:16px;}
-        .brand-name{font-size:13.5px;font-weight:700;color:#FFF;letter-spacing:-0.01em;}
-        .brand-sub{font-size:10px;color:#52525B;letter-spacing:0.04em;text-transform:uppercase;margin-top:1px;}
-        .nav-section{padding:10px;flex:1;}
-        .nav-label{font-size:10px;font-weight:600;color:#3F3F46;letter-spacing:0.08em;text-transform:uppercase;padding:0 8px;margin-bottom:3px;margin-top:14px;}
-        .nav-label:first-child{margin-top:0;}
-        .nav-item{display:flex;align-items:center;gap:9px;padding:7.5px 10px;border-radius:var(--r-sm);color:#71717A;font-size:13px;font-weight:500;cursor:pointer;transition:all 0.15s;border:1px solid transparent;user-select:none;margin-bottom:1px;}
-        .nav-item svg{width:15px;height:15px;flex-shrink:0;}
-        .nav-item:hover{background:var(--sidebar-hover);color:#D4D4D8;}
-        .nav-item.active{background:var(--sidebar-active-bg);color:#C7D2FE;border-color:rgba(99,102,241,0.2);}
-        .nav-dot{width:5px;height:5px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-left:auto;display:none;}
-        .nav-item.active .nav-dot{display:block;}
-        .sidebar-footer{padding:12px 10px;border-top:1px solid var(--sidebar-border);}
-        .version-tag{font-size:11px;color:#3F3F46;padding:0 8px;}
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        /* ══ HAMBURGER (mobile) ══ */
-        .hamburger{display:none;background:none;border:none;padding:6px;cursor:pointer;color:var(--text-2);border-radius:var(--r-sm);align-items:center;justify-content:center;}
-        .hamburger:hover{background:var(--bg);}
-        .hamburger svg{width:20px;height:20px;display:block;}
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text-1);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            font-size: 14px;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
 
-        /* ══ SIDEBAR OVERLAY (mobile) ══ */
-        .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;backdrop-filter:blur(2px);}
-        .sidebar-overlay.open{display:block;}
+        /* ══ NAV SHELL ══ */
+        .nav-shell { display: flex; flex-shrink: 0; }
+
+        /* ══ RAIL (icon-only sidebar) ══ */
+        .rail {
+            width: 64px;
+            background: var(--sidebar-bg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12px 0;
+            gap: 4px;
+            flex-shrink: 0;
+            border-right: 1px solid rgba(255,255,255,0.05);
+        }
+        .rail-brand {
+            width: 36px;
+            height: 36px;
+            background: var(--accent);
+            border-radius: var(--r-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            flex-shrink: 0;
+        }
+        .rail-brand svg { width: 18px; height: 18px; }
+
+        .rail-item {
+            position: relative;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            border-radius: var(--r-md);
+            background: transparent;
+            border: 1px solid transparent;
+            color: #52525B;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s, border-color 0.15s;
+            white-space: nowrap;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+        .rail-item svg { width: 18px; height: 18px; flex-shrink: 0; }
+        .rail-item:hover { background: var(--sidebar-hover); color: #D4D4D8; transform: none; box-shadow: none; }
+        .rail-item[aria-pressed="true"] {
+            background: var(--sidebar-active);
+            border-color: rgba(59,130,246,0.25);
+            color: #93C5FD;
+        }
+        .rail-item:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+        /* Rail tooltip */
+        .rail-item::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            left: calc(100% + 10px);
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--sidebar-bg);
+            color: #E4E4E7;
+            font-size: 11px;
+            font-weight: 500;
+            padding: 4px 8px;
+            border-radius: var(--r-sm);
+            border: 1px solid rgba(255,255,255,0.08);
+            white-space: nowrap;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.15s;
+            z-index: 999;
+        }
+        .rail-item:hover::after { opacity: 1; }
+
+        /* ══ SUB-SIDEBAR ══ */
+        .sidebar {
+            width: 220px;
+            background: var(--surface);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+        }
+        .sidebar::-webkit-scrollbar { width: 3px; }
+        .sidebar::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 2px; }
+
+        .brand {
+            padding: 14px 16px 12px;
+            border-bottom: 1px solid var(--border);
+        }
+        .brand-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-1);
+            letter-spacing: -0.02em;
+        }
+        .brand-sub {
+            font-size: 10px;
+            color: var(--text-3);
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            margin-top: 1px;
+        }
+
+        .nav-section { padding: 10px 8px; flex: 1; }
+        .nav-label {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--text-3);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 0 8px;
+            margin-bottom: 3px;
+            margin-top: 14px;
+        }
+        .nav-label:first-child { margin-top: 0; }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 7px 10px;
+            border-radius: var(--r-sm);
+            color: var(--text-2);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.12s, color 0.12s;
+            border: 1px solid transparent;
+            user-select: none;
+            margin-bottom: 1px;
+        }
+        .nav-item svg { width: 15px; height: 15px; flex-shrink: 0; color: var(--text-3); }
+        .nav-item:hover { background: var(--bg); color: var(--text-1); }
+        .nav-item.active {
+            background: var(--accent-soft);
+            color: var(--accent);
+            border-color: rgba(59,130,246,0.15);
+        }
+        .nav-item.active svg { color: var(--accent); }
+        .nav-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); flex-shrink: 0; margin-left: auto; display: none; }
+        .nav-item.active .nav-dot { display: block; }
+
+        .sidebar-footer {
+            padding: 10px 16px;
+            border-top: 1px solid var(--border);
+        }
+        .version-tag { font-size: 11px; color: var(--text-3); }
+
+        /* ══ HAMBURGER ══ */
+        .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            padding: 6px;
+            cursor: pointer;
+            color: var(--text-2);
+            border-radius: var(--r-sm);
+            align-items: center;
+            justify-content: center;
+            min-height: unset;
+        }
+        .hamburger:hover { background: var(--bg); transform: none; box-shadow: none; }
+        .hamburger svg { width: 20px; height: 20px; display: block; }
+
+        /* ══ OVERLAY ══ */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.45);
+            z-index: 200;
+        }
+        .sidebar-overlay.open { display: block; }
 
         /* ══ MAIN ══ */
-        .main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;}
-        .topbar{height:50px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:10px;flex-shrink:0;}
-        .topbar-title{font-size:13.5px;font-weight:600;color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-        .topbar-badge{font-size:10.5px;font-weight:500;padding:2px 8px;background:var(--accent-soft);color:var(--accent);border-radius:20px;white-space:nowrap;flex-shrink:0;}
-        .topbar-spacer{flex:1;}
-        .topbar-status{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--success);font-weight:500;white-space:nowrap;}
-        .status-dot{width:6px;height:6px;border-radius:50%;background:var(--success);animation:blink 2s infinite;flex-shrink:0;}
-        @keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
-        .content{flex:1;overflow-y:auto;padding:22px 24px;}
-        .content::-webkit-scrollbar{width:4px;} .content::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:2px;}
-        .tab-pane{display:none;animation:fadeUp 0.22s ease;}
-        .tab-pane.active{display:block;}
-        @keyframes fadeUp{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+        .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
 
-        /* ══ PAGE HEADERS ══ */
-        .page-header{margin-bottom:20px;}
-        .page-header h2{font-size:20px;font-weight:700;color:var(--text-1);letter-spacing:-0.03em;margin-bottom:4px;}
-        .page-header p{color:var(--text-2);font-size:12.5px;line-height:1.6;}
+        .topbar {
+            height: 48px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+        .topbar-title {
+            font-size: 13.5px;
+            font-weight: 600;
+            color: var(--text-1);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .topbar-badge {
+            font-size: 10.5px;
+            font-weight: 600;
+            padding: 2px 8px;
+            background: var(--accent-soft);
+            color: var(--accent);
+            border-radius: var(--r-sm);
+            border: 1px solid rgba(59,130,246,0.15);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .topbar-spacer { flex: 1; }
+        .topbar-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11.5px;
+            color: var(--success);
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--success);
+            flex-shrink: 0;
+        }
+
+        .content { flex: 1; overflow-y: auto; padding: 24px; }
+        .content::-webkit-scrollbar { width: 4px; }
+        .content::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 2px; }
+
+        .tab-pane { display: none; animation: fadeUp 0.2s ease; }
+        .tab-pane.active { display: block; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ══ PAGE HEADER ══ */
+        .page-header { margin-bottom: 20px; }
+        .page-header h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-1);
+            letter-spacing: -0.03em;
+            margin-bottom: 4px;
+        }
+        .page-header p { color: var(--text-2); font-size: 12.5px; line-height: 1.6; }
 
         /* ══ CARDS ══ */
-        .card{background:var(--surface);border-radius:var(--r-lg);border:1px solid var(--border);padding:16px 18px;margin-bottom:14px;}
-        .card-title{font-size:12.5px;font-weight:600;color:var(--text-1);margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:7px;}
-        .card-title svg{width:13px;height:13px;color:var(--accent);}
+        .card {
+            background: var(--surface);
+            border-radius: var(--r-lg);
+            border: 1px solid var(--border);
+            padding: 16px 18px;
+            margin-bottom: 14px;
+        }
+        .card-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-1);
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+        .card-title svg { width: 13px; height: 13px; color: var(--accent); }
 
         /* ══ HERO ══ */
-        .hero{background:var(--sidebar-bg);border-radius:var(--r-xl);padding:26px 24px;margin-bottom:14px;position:relative;overflow:hidden;}
-        .hero::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(99,102,241,0.22) 0%,transparent 70%);}
-        .hero::after{content:'';position:absolute;bottom:-40px;left:30%;width:140px;height:140px;background:radial-gradient(circle,rgba(129,140,248,0.08) 0%,transparent 70%);}
-        .hero-eyebrow{font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent-mid);margin-bottom:8px;}
-        .hero h1{font-size:22px;font-weight:700;color:#FFF;letter-spacing:-0.03em;line-height:1.25;margin-bottom:8px;}
-        .hero p{font-size:12.5px;color:#71717A;line-height:1.65;max-width:500px;}
+        .hero {
+            background: var(--sidebar-bg);
+            border-radius: var(--r-lg);
+            padding: 28px 24px;
+            margin-bottom: 14px;
+        }
+        .hero h1 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #FFFFFF;
+            letter-spacing: -0.03em;
+            line-height: 1.25;
+            margin-bottom: 8px;
+        }
+        .hero p {
+            font-size: 12.5px;
+            color: #71717A;
+            line-height: 1.65;
+            max-width: 480px;
+        }
 
         /* ══ STEPS ══ */
-        .steps{list-style:none;}
-        .step{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--border);}
-        .step:last-child{border-bottom:none;padding-bottom:0;} .step:first-child{padding-top:0;}
-        .step-num{width:22px;height:22px;border-radius:50%;background:var(--accent-soft);color:var(--accent);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
-        .step-body h4{font-size:13px;font-weight:600;color:var(--text-1);margin-bottom:3px;}
-        .step-body p{font-size:12px;color:var(--text-2);line-height:1.55;}
-        .step-body code{font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:1px 5px;color:var(--accent);}
+        .steps { list-style: none; }
+        .step {
+            display: flex;
+            gap: 12px;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .step:last-child { border-bottom: none; padding-bottom: 0; }
+        .step:first-child { padding-top: 0; }
+        .step-num {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--accent-soft);
+            color: var(--accent);
+            font-size: 10px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 1px;
+            border: 1px solid rgba(59,130,246,0.2);
+        }
+        .step-body h4 { font-size: 13px; font-weight: 600; color: var(--text-1); margin-bottom: 3px; }
+        .step-body p { font-size: 12px; color: var(--text-2); line-height: 1.6; }
+        .step-body code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 1px 5px;
+            color: var(--accent);
+        }
 
         /* ══ TEXTAREA ══ */
-        textarea{width:100%;height:130px;padding:11px 13px;border:1px solid var(--border-strong);border-radius:var(--r-md);font-family:'JetBrains Mono','Courier New',monospace;font-size:11.5px;background:#FAFAFA;color:var(--text-1);resize:vertical;transition:border-color 0.15s,box-shadow 0.15s;margin-bottom:12px;line-height:1.6;}
-        textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(99,102,241,0.1);background:#fff;}
-        textarea::placeholder{color:var(--text-3);}
+        textarea {
+            width: 100%;
+            height: 130px;
+            padding: 10px 12px;
+            border: 1px solid var(--border-strong);
+            border-radius: var(--r-sm);
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-size: 11.5px;
+            background: var(--surface-raised);
+            color: var(--text-1);
+            resize: vertical;
+            transition: border-color 0.15s, box-shadow 0.15s;
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+            background: var(--surface);
+        }
+        textarea::placeholder { color: var(--text-3); }
 
         /* ══ BUTTONS ══ */
-        .btn-row{display:flex;gap:7px;flex-wrap:wrap;align-items:center;}
-        button{display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:7px 13px;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;border-radius:var(--r-sm);border:none;cursor:pointer;transition:all 0.15s;letter-spacing:-0.01em;white-space:nowrap;}
-        button svg{width:13px;height:13px;flex-shrink:0;}
-        .btn-primary{background:var(--accent);color:#fff;}
-        .btn-primary:hover{background:#4F46E5;transform:translateY(-1px);box-shadow:0 4px 12px rgba(99,102,241,0.3);}
-        .btn-ghost{background:transparent;color:var(--danger);border:1px solid rgba(239,68,68,0.25);}
-        .btn-ghost:hover{background:rgba(239,68,68,0.05);border-color:var(--danger);}
-        .btn-success{background:var(--success);color:#fff;}
-        .btn-success:hover{background:#059669;transform:translateY(-1px);box-shadow:0 4px 12px rgba(16,185,129,0.25);}
-        .btn-amber{background:var(--warning);color:#fff;}
-        .btn-amber:hover{background:#D97706;transform:translateY(-1px);box-shadow:0 4px 12px rgba(245,158,11,0.25);}
-        .btn-dark{background:var(--sidebar-bg);color:#C7D2FE;border:1px solid rgba(255,255,255,0.08);}
-        .btn-dark:hover{background:#1C1C27;transform:translateY(-1px);}
-        .btn-purple{background:#7C3AED;color:#fff;}
-        .btn-purple:hover{background:#6D28D9;transform:translateY(-1px);box-shadow:0 4px 12px rgba(124,58,237,0.3);}
-        .btn-rose{background:#E11D48;color:#fff;}
-        .btn-rose:hover{background:#BE123C;transform:translateY(-1px);box-shadow:0 4px 12px rgba(225,29,72,0.3);}
-        .btn-cyan{background:#0891B2;color:#fff;}
-        .btn-cyan:hover{background:#0E7490;transform:translateY(-1px);box-shadow:0 4px 12px rgba(8,145,178,0.3);}
-        .btn-teal{background:#0D9488;color:#fff;}
-        .btn-teal:hover{background:#0F766E;transform:translateY(-1px);box-shadow:0 4px 12px rgba(13,148,136,0.3);}
+        .btn-row { display: flex; gap: 7px; flex-wrap: wrap; align-items: center; }
+        button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            padding: 8px 14px;
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            border-radius: var(--r-sm);
+            border: none;
+            cursor: pointer;
+            transition: background 0.12s, opacity 0.12s;
+            letter-spacing: -0.01em;
+            white-space: nowrap;
+            min-height: 36px;
+        }
+        button svg { width: 13px; height: 13px; flex-shrink: 0; }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .btn-primary { background: var(--accent); color: #fff; }
+        .btn-primary:hover { background: #2563EB; transform: none; box-shadow: none; }
+
+        .btn-ghost { background: transparent; color: var(--danger); border: 1px solid rgba(220,38,38,0.3); }
+        .btn-ghost:hover { background: rgba(220,38,38,0.05); border-color: var(--danger); transform: none; box-shadow: none; }
+
+        .btn-success { background: var(--success); color: #fff; }
+        .btn-success:hover { background: #15803D; transform: none; box-shadow: none; }
+
+        .btn-amber { background: var(--warning); color: #fff; }
+        .btn-amber:hover { background: #B45309; transform: none; box-shadow: none; }
+
+        .btn-dark { background: var(--sidebar-bg); color: #D4D4D8; border: 1px solid rgba(255,255,255,0.1); }
+        .btn-dark:hover { background: #18181B; transform: none; box-shadow: none; }
+
+        .btn-purple { background: #7C3AED; color: #fff; }
+        .btn-purple:hover { background: #6D28D9; transform: none; box-shadow: none; }
+
+        .btn-rose { background: #E11D48; color: #fff; }
+        .btn-rose:hover { background: #BE123C; transform: none; box-shadow: none; }
+
+        .btn-cyan { background: #0891B2; color: #fff; }
+        .btn-cyan:hover { background: #0E7490; transform: none; box-shadow: none; }
+
+        .btn-teal { background: #0D9488; color: #fff; }
+        .btn-teal:hover { background: #0F766E; transform: none; box-shadow: none; }
 
         /* ══ METRICS ══ */
-        .metrics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:16px;}
-        .metric{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:14px 16px;position:relative;overflow:hidden;}
-        .metric::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:var(--r-lg) var(--r-lg) 0 0;}
-        .metric.m-indigo::after{background:linear-gradient(90deg,#6366F1,#818CF8);}
-        .metric.m-amber::after{background:linear-gradient(90deg,#F59E0B,#FCD34D);}
-        .metric.m-green::after{background:linear-gradient(90deg,#10B981,#34D399);}
-        .metric.m-red::after{background:linear-gradient(90deg,#EF4444,#F87171);}
-        .metric.m-purple::after{background:linear-gradient(90deg,#7C3AED,#A78BFA);}
-        .metric.m-cyan::after{background:linear-gradient(90deg,#0891B2,#22D3EE);}
-        .metric.m-teal::after{background:linear-gradient(90deg,#0D9488,#2DD4BF);}
-        .metric-label{font-size:10px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:7px;}
-        .metric-val{font-size:22px;font-weight:700;color:var(--text-1);letter-spacing:-0.03em;line-height:1;margin-bottom:3px;}
-        .metric-sub{font-size:11px;color:var(--text-3);}
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        .metric {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-left-width: 2px;
+            border-radius: var(--r-md);
+            padding: 14px 16px;
+        }
+        .metric.m-indigo { border-left-color: #3B82F6; }
+        .metric.m-amber { border-left-color: #D97706; }
+        .metric.m-green { border-left-color: #16A34A; }
+        .metric.m-red { border-left-color: #DC2626; }
+        .metric.m-purple { border-left-color: #7C3AED; }
+        .metric.m-cyan { border-left-color: #0891B2; }
+        .metric.m-teal { border-left-color: #0D9488; }
+
+        .metric-label {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--text-3);
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            margin-bottom: 6px;
+        }
+        .metric-val {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-1);
+            letter-spacing: -0.03em;
+            line-height: 1;
+            margin-bottom: 3px;
+        }
+        .metric-sub { font-size: 11px; color: var(--text-3); }
 
         /* ══ TABLE ══ */
-        .table-wrap{overflow-x:auto;border-radius:var(--r-md);border:1px solid var(--border);background:var(--surface);margin-bottom:12px;}
-        table{width:100%;border-collapse:collapse;font-size:12px;}
-        th,td{padding:8px 12px;border-bottom:1px solid var(--border);border-right:1px solid var(--border);text-align:right;white-space:nowrap;}
-        th{background:#FAFAFA;font-weight:600;font-size:11px;color:var(--text-2);text-align:center;}
-        tr:last-child td{border-bottom:none;}
-        td:last-child,th:last-child{border-right:none;}
-        tr:hover td{background:#FAFAFA;}
-        .text-center{text-align:center;} .text-left{text-align:left;}
-        .font-bold{font-weight:600;color:var(--text-1);}
-        .bg-light{background:#FAFAFA;}
-        .excel-cell{border:1px solid var(--border);}
-        /* DTR row highlight */
-        .dtr-row td{background:#FFFBEB !important;color:#92400E;font-size:11px;}
-        .dtr-row td:first-child{font-weight:600;color:#78350F;}
+        .table-wrap {
+            overflow-x: auto;
+            border-radius: var(--r-md);
+            border: 1px solid var(--border);
+            background: var(--surface);
+            margin-bottom: 12px;
+        }
+        table { width: 100%; border-collapse: collapse; font-size: 12px; }
+        th, td {
+            padding: 8px 12px;
+            border-bottom: 1px solid var(--border);
+            border-right: 1px solid var(--border);
+            text-align: right;
+            white-space: nowrap;
+        }
+        th { background: var(--surface-raised); font-weight: 600; font-size: 11px; color: var(--text-2); text-align: center; }
+        tr:last-child td { border-bottom: none; }
+        td:last-child, th:last-child { border-right: none; }
+        tr:hover td { background: #FAFAFA; }
+        .text-center { text-align: center; }
+        .text-left { text-align: left; }
+        .font-bold { font-weight: 600; color: var(--text-1); }
+        .bg-light { background: var(--surface-raised); }
+        .excel-cell { border: 1px solid var(--border); }
+        .dtr-row td { background: #FFFBEB !important; color: #92400E; font-size: 11px; }
+        .dtr-row td:first-child { font-weight: 600; color: #78350F; }
 
         /* ══ ACTION BAR ══ */
-        .action-bar{background:#FAFAFA;border:1px solid var(--border);border-radius:var(--r-md);padding:11px 13px;margin-bottom:14px;display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
-        .action-bar-label{font-size:11px;font-weight:500;color:var(--text-3);margin-right:4px;}
+        .action-bar {
+            background: var(--surface-raised);
+            border: 1px solid var(--border);
+            border-radius: var(--r-md);
+            padding: 10px 12px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            flex-wrap: wrap;
+        }
+        .action-bar-label { font-size: 11px; font-weight: 500; color: var(--text-3); margin-right: 4px; }
 
         /* ══ DTR SECTION ══ */
-        .dtr-section{background:#FFFBEB;border:1px solid #FDE68A;border-radius:var(--r-md);padding:12px 14px;margin-bottom:14px;}
-        .dtr-section-title{font-size:11.5px;font-weight:700;color:#78350F;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
-        .dtr-section-title svg{width:13px;height:13px;}
-        .dtr-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin-bottom:10px;}
-        .dtr-card{background:#FEF3C7;border:1px solid #FDE68A;border-radius:var(--r-sm);padding:10px 12px;}
-        .dtr-card-label{font-size:10px;font-weight:600;color:#92400E;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;}
-        .dtr-card-val{font-size:20px;font-weight:700;color:#78350F;line-height:1;}
-        .dtr-card-sub{font-size:10.5px;color:#A16207;margin-top:2px;}
-        .dtr-copy-row{display:flex;gap:6px;flex-wrap:wrap;}
+        .dtr-section {
+            background: #FFFBEB;
+            border: 1px solid #FDE68A;
+            border-radius: var(--r-md);
+            padding: 12px 14px;
+            margin-bottom: 14px;
+        }
+        .dtr-section-title {
+            font-size: 11.5px;
+            font-weight: 700;
+            color: #78350F;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .dtr-section-title svg { width: 13px; height: 13px; }
+        .dtr-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        .dtr-card {
+            background: #FEF3C7;
+            border: 1px solid #FDE68A;
+            border-radius: var(--r-sm);
+            padding: 10px 12px;
+        }
+        .dtr-card-label { font-size: 10px; font-weight: 600; color: #92400E; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+        .dtr-card-val { font-size: 20px; font-weight: 700; color: #78350F; line-height: 1; }
+        .dtr-card-sub { font-size: 10.5px; color: #A16207; margin-top: 2px; }
+        .dtr-copy-row { display: flex; gap: 6px; flex-wrap: wrap; }
 
         /* ══ CHART ══ */
-        .chart-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:16px 18px;margin-bottom:14px;}
-        .chart-title{font-size:12px;font-weight:600;color:var(--text-1);margin-bottom:12px;display:flex;align-items:center;gap:6px;}
-        .chart-wrap{position:relative;width:100%;height:170px;}
-        canvas.chart-canvas{width:100%!important;height:170px!important;}
-        .chart-legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;}
-        .legend-item{display:flex;align-items:center;gap:4px;font-size:10.5px;color:var(--text-2);font-weight:500;}
-        .legend-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+        .chart-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            padding: 16px 18px;
+            margin-bottom: 14px;
+        }
+        .chart-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-1);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .chart-wrap { position: relative; width: 100%; height: 160px; }
+        canvas.chart-canvas { width: 100% !important; height: 160px !important; }
+        .chart-legend { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 10.5px;
+            color: var(--text-2);
+            font-weight: 500;
+        }
+        .legend-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
 
         /* ══ TWO COL ══ */
-        .two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
 
         /* ══ TOAST ══ */
-        #toast-container{position:fixed;top:14px;right:14px;z-index:9999;display:flex;flex-direction:column;gap:6px;}
-        .toast{background:var(--sidebar-bg);color:#E4E4E7;padding:9px 14px;border-radius:var(--r-md);font-size:12px;font-weight:500;border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;gap:7px;animation:toastIn 0.22s ease forwards;opacity:0;transform:translateX(8px);box-shadow:0 8px 24px rgba(0,0,0,0.18);}
-        .toast.fade-out{animation:toastOut 0.28s ease forwards;}
-        @keyframes toastIn{to{opacity:1;transform:translateX(0);}}
-        @keyframes toastOut{to{opacity:0;transform:translateY(-6px);}}
+        #toast-container {
+            position: fixed;
+            top: 14px;
+            right: 14px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .toast {
+            background: var(--sidebar-bg);
+            color: #E4E4E7;
+            padding: 8px 12px;
+            border-radius: var(--r-md);
+            font-size: 12px;
+            font-weight: 500;
+            border: 1px solid rgba(255,255,255,0.08);
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            animation: toastIn 0.2s ease forwards;
+            opacity: 0;
+            transform: translateX(8px);
+        }
+        .toast.fade-out { animation: toastOut 0.25s ease forwards; }
+        @keyframes toastIn { to { opacity: 1; transform: translateX(0); } }
+        @keyframes toastOut { to { opacity: 0; transform: translateY(-6px); } }
 
         /* ══ FOOTER ══ */
-        .footer{text-align:center;padding:11px;font-size:11px;color:var(--text-3);border-top:1px solid var(--border);background:var(--surface);}
-        .hidden-ta{display:none;}
-        .chip{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:500;color:var(--accent);background:var(--accent-soft);padding:4px 9px;border-radius:20px;margin-top:8px;}
-        .chip svg{width:11px;height:11px;}
-        .section-label{font-size:10.5px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:7px;}
-        .copy-date-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+        .footer {
+            text-align: center;
+            padding: 10px;
+            font-size: 11px;
+            color: var(--text-3);
+            border-top: 1px solid var(--border);
+            background: var(--surface);
+        }
 
-        /* ══ MOBILE RESPONSIVE ══ */
+        .hidden-ta { display: none; }
+        .section-label {
+            font-size: 10.5px;
+            font-weight: 600;
+            color: var(--text-3);
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            margin-bottom: 7px;
+        }
+        .copy-date-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+
+        .info-note {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 11px;
+            color: var(--accent);
+            background: var(--accent-soft);
+            border: 1px solid rgba(59,130,246,0.15);
+            padding: 5px 10px;
+            border-radius: var(--r-sm);
+            margin-top: 8px;
+        }
+        .info-note svg { width: 11px; height: 11px; flex-shrink: 0; }
+
+        /* ══ HANDOVER ══ */
+        .ho-layout { display: grid; gap: 14px; }
+        .ho-panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            min-width: 0;
+        }
+        .ho-panel [hidden], .nav-section[hidden] { display: none !important; }
+        .ho-panel-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+        }
+        .ho-panel-head h3 {
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--text-1);
+            display: flex;
+            align-items: baseline;
+            gap: 9px;
+        }
+        .ho-idx {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10.5px;
+            font-weight: 500;
+            color: var(--accent);
+            letter-spacing: 0.04em;
+        }
+        .ho-body { padding: 16px; display: grid; gap: 14px; }
+        .ho-field { display: grid; gap: 6px; min-width: 0; }
+        .ho-panel fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: 10px; min-width: 0; }
+        .ho-panel legend { padding: 0; }
+        .ho-field > label, .ho-field > .ho-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-2);
+            letter-spacing: 0.02em;
+        }
+        .ho-hint { font-size: 11px; color: var(--text-3); line-height: 1.5; }
+        .ho-hint.warn { color: #B45309; }
+
+        .ho-panel input[type="text"],
+        .ho-panel input[type="number"],
+        .ho-panel input[type="date"],
+        .ho-panel textarea {
+            width: 100%;
+            min-height: 44px;
+            margin: 0;
+            padding: 10px 12px;
+            border: 1px solid var(--border-strong);
+            border-radius: var(--r-sm);
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            line-height: 1.45;
+            background: var(--surface-raised);
+            color: var(--text-1);
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+        .ho-panel textarea { height: auto; min-height: 92px; resize: vertical; }
+        .ho-panel #ho-noc {
+            min-height: 200px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11.5px;
+            line-height: 1.6;
+        }
+        .ho-panel input:focus, .ho-panel textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+            background: var(--surface);
+        }
+        .ho-panel input::placeholder, .ho-panel textarea::placeholder { color: var(--text-3); }
+        .ho-body button, .ho-panel-head button { min-height: 44px; padding: 9px 14px; font-size: 12px; }
+        .ho-row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+        .ho-seg {
+            display: flex;
+            border: 1px solid var(--border-strong);
+            border-radius: var(--r-sm);
+            overflow: hidden;
+            background: var(--surface);
+        }
+        .ho-seg button {
+            flex: 1 1 0;
+            min-height: 44px;
+            padding: 8px 6px;
+            margin: 0;
+            border: 0;
+            border-right: 1px solid var(--border);
+            border-radius: 0;
+            background: transparent;
+            color: var(--text-2);
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .ho-seg button:last-child { border-right: 0; }
+        .ho-seg button:hover { background: var(--bg); transform: none; box-shadow: none; }
+        .ho-seg button[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+        .ho-seg button[aria-pressed="true"]:hover { background: var(--accent-soft); }
+        .ho-seg button:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+
+        .ho-metrics { display: grid; gap: 7px; font-size: 12px; }
+        .ho-metric { display: flex; align-items: baseline; gap: 8px; min-width: 0; }
+        .ho-metric dt { color: var(--text-2); white-space: nowrap; }
+        .ho-dots { flex: 1 1 auto; min-width: 10px; border-bottom: 1px dotted var(--border-strong); transform: translateY(-3px); }
+        .ho-metric dd { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: var(--text-1); white-space: nowrap; }
+
+        .ho-readout {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 8px;
+            min-height: 44px;
+            padding: 10px 12px;
+            border: 1px dashed var(--border-strong);
+            border-radius: var(--r-sm);
+            background: var(--surface-raised);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--text-1);
+        }
+        .ho-readout .ho-label { font-family: 'Inter', sans-serif; font-size: 11px; color: var(--text-3); }
+
+        .ho-chips { display: flex; flex-wrap: wrap; gap: 7px; }
+        .ho-chip {
+            min-height: 44px;
+            padding: 8px 12px;
+            border: 1px solid var(--border-strong);
+            border-radius: var(--r-sm);
+            background: var(--surface);
+            color: var(--text-2);
+            font-size: 11.5px;
+            font-weight: 500;
+        }
+        .ho-chip:hover { background: var(--bg); border-color: rgba(59,130,246,0.3); color: var(--accent); transform: none; box-shadow: none; }
+
+        .ho-status { font-size: 11.5px; color: var(--text-3); min-height: 1.4em; }
+        .ho-status.warn { color: #B45309; }
+
+        .ho-preview {
+            background: var(--sidebar-bg);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: var(--r-lg);
+            overflow: hidden;
+        }
+        .ho-preview .ho-panel-head { border-bottom: 1px solid rgba(255,255,255,0.07); }
+        .ho-preview .ho-panel-head h3 { color: #E4E4E7; }
+        .ho-preview .ho-idx { color: #93C5FD; }
+
+        .ho-pre {
+            margin: 0;
+            padding: 16px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11.5px;
+            line-height: 1.65;
+            color: #E4E4E7;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+            max-height: 62vh;
+            overflow-y: auto;
+            overscroll-behavior: contain;
+        }
+        .ho-empty { padding: 30px 18px; text-align: center; }
+        .ho-empty p { max-width: 36ch; margin: 0 auto; font-size: 12px; line-height: 1.6; color: #71717A; }
+
+        .ho-sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+        @media (min-width: 1100px) {
+            .ho-layout {
+                grid-template-columns: minmax(0,1.02fr) minmax(0,0.98fr);
+                grid-template-areas: "noc preview" "editor preview";
+                align-items: start;
+            }
+            .ho-noc { grid-area: noc; }
+            .ho-editor { grid-area: editor; }
+            .ho-preview { grid-area: preview; position: sticky; top: 0; }
+        }
+
+        @media (max-width: 520px) {
+            .ho-row2 { grid-template-columns: 1fr; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .tab-pane { animation: none; }
+            .ho-seg button, .ho-chip, .ho-panel input, .ho-panel textarea { transition: none; }
+        }
+
+        /* ══ MOBILE ══ */
         @media (max-width: 768px) {
             .hamburger { display: flex; }
-            .sidebar {
-                position: fixed; top: 0; left: -260px; height: 100%;
-                z-index: 300; width: 240px; transition: left 0.25s ease;
-                box-shadow: 4px 0 24px rgba(0,0,0,0.35);
+            .nav-shell {
+                position: fixed;
+                top: 0;
+                left: -300px;
+                height: 100%;
+                width: 284px;
+                z-index: 300;
+                transition: left 0.25s ease;
+                box-shadow: 4px 0 20px rgba(0,0,0,0.3);
             }
-            .sidebar.open { left: 0; }
-            .topbar { padding: 0 12px; height: 46px; gap: 8px; }
+            .nav-shell.open { left: 0; }
+            .rail { width: 60px; padding: 10px 0; }
+            .rail-item { width: 40px; height: 40px; }
+            .rail-item::after { display: none; }
+            .sidebar { width: auto; flex: 1; height: 100%; }
+            .topbar { padding: 0 14px; height: 46px; gap: 8px; }
             .topbar-title { font-size: 12.5px; }
             .topbar-status span:not(.status-dot) { display: none; }
-            .content { padding: 14px 13px 24px; }
-            .hero { padding: 20px 16px; border-radius: var(--r-lg); }
+            .content { padding: 14px 14px 24px; }
+            .hero { padding: 20px 16px; }
             .hero h1 { font-size: 18px; }
             .hero p { font-size: 12px; }
             .page-header { margin-bottom: 16px; }
             .page-header h2 { font-size: 18px; }
             .metrics-grid { grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
             .metric { padding: 11px 12px; }
-            .metric-val { font-size: 17px; }
+            .metric-val { font-size: 18px; }
             .metric-label { font-size: 9.5px; }
             .two-col { grid-template-columns: 1fr; gap: 10px; }
             .dtr-cards { grid-template-columns: 1fr 1fr; gap: 7px; }
             .card { padding: 13px 14px; margin-bottom: 11px; }
             .chart-card { padding: 12px 13px; }
-            .chart-wrap { height: 150px; }
-            canvas.chart-canvas { height: 150px !important; }
+            .chart-wrap { height: 140px; }
+            canvas.chart-canvas { height: 140px !important; }
             .btn-row { gap: 6px; }
-            button { padding: 7px 11px; font-size: 11.5px; }
-            .copy-date-row button, .dtr-copy-row button { font-size: 11px; padding: 6px 10px; }
+            button { min-height: 44px; padding: 8px 12px; font-size: 11.5px; }
+            .hamburger { width: 44px; height: 44px; padding: 12px; min-height: 44px; }
+            .nav-item { min-height: 44px; }
+            .copy-date-row button, .dtr-copy-row button { font-size: 11px; padding: 7px 10px; }
             textarea { height: 110px; font-size: 11px; margin-bottom: 10px; }
             .action-bar { padding: 9px 11px; gap: 6px; }
             #toast-container { top: 54px; right: 10px; left: 10px; }
             .toast { font-size: 11.5px; padding: 8px 12px; }
             .footer { padding: 9px; font-size: 10.5px; }
         }
+
         @media (max-width: 420px) {
             .dtr-cards { grid-template-columns: 1fr; }
             .hero h1 { font-size: 16px; }
-            .hero { padding: 16px 13px; }
+            .hero { padding: 16px 14px; }
             .metrics-grid { gap: 6px; }
         }
     </style>
 </head>
 <body>
+
 <textarea id="puttyCommand" class="hidden-ta">grep -hE "AGGR:\[ (MDM|JTS) \].*OPR:\[ (XL|ISAT|TSEL|THREE|SMARTFREN|AXIS|UNKNOWN) \]" isorouter* \
 | awk '
 {
@@ -283,54 +956,80 @@ echo "Script tambahan sukses di-copy!"</textarea>
 
 <div id="toast-container"></div>
 
-<!-- ══ SIDEBAR (desktop) ══ -->
-<aside class="sidebar">
-    <div class="brand">
-        <div class="brand-logo">
-            <div class="brand-icon"><svg fill="none" stroke="#fff" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></div>
-            <div><div class="brand-name">Apuy Copas Copas</div><div class="brand-sub">Engineer Dashboard</div></div>
+<!-- ══ NAV SHELL ══ -->
+<div class="nav-shell" id="navShell">
+    <!-- Rail: icon-only module switcher -->
+    <nav class="rail" aria-label="Pilih modul">
+        <div class="rail-brand" aria-hidden="true">
+            <svg fill="none" stroke="#fff" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
         </div>
-    </div>
-    <div class="nav-section">
-        <div class="nav-label">Menu</div>
-        <div class="nav-item active" id="snav-home" onclick="switchTab('home',this)">
-            <svg fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
-            Beranda<span class="nav-dot"></span>
+        <button type="button" class="rail-item" data-section="engineer" aria-pressed="false" onclick="switchSection('engineer')" data-tooltip="Engineer">
+            <svg fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        </button>
+        <button type="button" class="rail-item" data-section="noc" aria-pressed="true" onclick="switchSection('noc')" data-tooltip="NOC">
+            <svg fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"/></svg>
+        </button>
+    </nav>
+
+    <!-- Sub-sidebar with labels -->
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-name">Apuy Copas Copas</div>
+            <div class="brand-sub">Engineer Dashboard</div>
         </div>
-        <div class="nav-label">Rekap Trafik</div>
-        <div class="nav-item" id="snav-dashboard" onclick="switchTab('dashboard',this)">
-            <svg fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-            Traffic SMS Real Time<span class="nav-dot"></span>
+        <div class="nav-section" id="navNoc">
+            <div class="nav-label">Menu</div>
+            <div class="nav-item active" id="snav-home" onclick="switchTab('home',this)">
+                <svg fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                Beranda<span class="nav-dot"></span>
+            </div>
+            <div class="nav-label">Rekap Trafik</div>
+            <div class="nav-item" id="snav-dashboard" onclick="switchTab('dashboard',this)">
+                <svg fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                Traffic SMS Real Time<span class="nav-dot"></span>
+            </div>
+            <div class="nav-item" id="snav-wa_traffic" onclick="switchTab('wa_traffic',this)">
+                <svg fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+                Traffic WhatsApp<span class="nav-dot"></span>
+            </div>
+            <div class="nav-item" id="snav-sms_traffic" onclick="switchTab('sms_traffic',this)">
+                <svg fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                Traffic SMS<span class="nav-dot"></span>
+            </div>
         </div>
-        <div class="nav-item" id="snav-wa_traffic" onclick="switchTab('wa_traffic',this)">
-            <svg fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
-            Traffic WhatsApp<span class="nav-dot"></span>
+        <div class="nav-section" id="navEngineer" hidden>
+            <div class="nav-label">Engineer</div>
+            <div class="nav-item" id="snav-handover" onclick="switchTab('handover',this)">
+                <svg fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                Handover Shift<span class="nav-dot"></span>
+            </div>
         </div>
-        <div class="nav-item" id="snav-sms_traffic" onclick="switchTab('sms_traffic',this)">
-            <svg fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-            Traffic SMS<span class="nav-dot"></span>
-        </div>
-    </div>
-    <div class="sidebar-footer"><div class="version-tag">v2.3 · 2026</div></div>
-</aside>
+        <div class="sidebar-footer"><div class="version-tag">v2.3 · 2026</div></div>
+    </aside>
+</div>
 
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
 
 <!-- ══ MAIN ══ -->
 <div class="main">
     <div class="topbar">
-        <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+        <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
         <span class="topbar-title" id="topbar-title">Beranda</span>
         <span class="topbar-badge" id="topbar-badge">Overview</span>
         <div class="topbar-spacer"></div>
-        <div class="topbar-status"><span class="status-dot"></span><span>Sistem aktif</span></div>
+        <div class="topbar-status">
+            <span class="status-dot"></span>
+            <span>Sistem aktif</span>
+        </div>
     </div>
+
     <div class="content">
 
         <!-- HOME -->
         <div id="home" class="tab-pane active">
             <div class="hero">
-                <div class="hero-eyebrow">⚡ Automation Tool</div>
                 <h1>Selamat Datang,<br>NOC SMS &amp; WA!</h1>
                 <p>Parsing log trafik SMS MDM &amp; JATIS jadi tabel siap export Excel — dalam hitungan detik.</p>
             </div>
@@ -344,11 +1043,17 @@ echo "Script tambahan sukses di-copy!"</textarea>
                         <div class="step-num">1</div>
                         <div class="step-body">
                             <h4>Tarik Data dari Server</h4>
-                            <p>Remote via PuTTY ke IP <code>10.0.3.3</code>, masuk ke <code>cd satkom/srv/APR</code>, jalankan script AWK.</p>
+                            <p>Remote via PuTTY ke IP <code>10.0.3.3</code>, masuk ke <code>cd satkom/svr/APR</code>, jalankan script AWK.</p>
                             <div style="margin-top:9px;display:flex;gap:7px;flex-wrap:wrap;">
-                                <button class="btn-dark" onclick="copyPuTTYCommand()"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>Copy Command PuTTY</button>
+                                <button class="btn-dark" onclick="copyPuTTYCommand()">
+                                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                                    Copy Command AWK
+                                </button>
                             </div>
-                            <div class="chip"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Paste ke PuTTY via klik kanan setelah copy</div>
+                            <div class="info-note">
+                                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                Paste ke PuTTY via klik kanan setelah copy
+                            </div>
                         </div>
                     </li>
                     <li class="step">
@@ -378,8 +1083,14 @@ echo "Script tambahan sukses di-copy!"</textarea>
             <div class="card">
                 <textarea id="logInput" placeholder="Paste raw log data di sini (AGGR : MDM / JTS)..."></textarea>
                 <div class="btn-row">
-                    <button class="btn-primary" onclick="generateSummary()"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Process Data</button>
-                    <button class="btn-ghost" onclick="clearAll()"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>Clear</button>
+                    <button class="btn-primary" onclick="generateSummary()">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        Process Data
+                    </button>
+                    <button class="btn-ghost" onclick="clearAll()">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                        Clear
+                    </button>
                 </div>
             </div>
             <div id="outputSection" style="display:none;">
@@ -390,17 +1101,26 @@ echo "Script tambahan sukses di-copy!"</textarea>
                     <div class="metric m-red"><div class="metric-label">Total MDM+JATIS</div><div class="metric-val" id="anaTotalAll" style="color:var(--accent);">0</div><div class="metric-sub">Keseluruhan</div></div>
                 </div>
                 <div class="chart-card">
-                    <div class="chart-title"><span style="background:#6366F1;width:8px;height:8px;border-radius:50%;display:inline-block;"></span>Trafik Per Jam — MDM vs JATIS</div>
+                    <div class="chart-title">
+                        <span style="background:var(--accent);width:6px;height:6px;border-radius:50%;display:inline-block;flex-shrink:0;"></span>
+                        Trafik per Jam MDM vs JATIS — hari ini
+                    </div>
                     <div class="chart-wrap"><canvas id="rtChart" class="chart-canvas"></canvas></div>
                     <div class="chart-legend">
-                        <div class="legend-item"><span class="legend-dot" style="background:#6366F1;"></span>MDM Total</div>
-                        <div class="legend-item"><span class="legend-dot" style="background:#10B981;"></span>JATIS Telkomsel</div>
+                        <div class="legend-item"><span class="legend-dot" style="background:#3B82F6;"></span>MDM Total</div>
+                        <div class="legend-item"><span class="legend-dot" style="background:#16A34A;"></span>JATIS Telkomsel</div>
                     </div>
                 </div>
                 <div class="action-bar">
                     <span class="action-bar-label">Export:</span>
-                    <button class="btn-success" onclick="copyTables()"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>Copy Full Tabel</button>
-                    <button class="btn-amber" onclick="copyDataOnly()"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>Copy Nilai Provider</button>
+                    <button class="btn-success" onclick="copyTables()">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                        Copy Full Tabel
+                    </button>
+                    <button class="btn-amber" onclick="copyDataOnly()">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        Copy Nilai Provider
+                    </button>
                 </div>
                 <div id="tableContainer"></div>
             </div>
@@ -415,7 +1135,10 @@ echo "Script tambahan sukses di-copy!"</textarea>
             <div class="card">
                 <textarea id="waInput" placeholder="Ctrl+A dan Ctrl+C dari web monitoring WABA metalogic, lalu paste di sini...&#10;Contoh:&#10;00.00 - 01.00&#10;Total: 30213"></textarea>
                 <div class="btn-row">
-                    <button class="btn-primary" onclick="processWA()"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Process Data WA</button>
+                    <button class="btn-primary" onclick="processWA()">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        Process Data WA
+                    </button>
                     <button class="btn-ghost" onclick="document.getElementById('waInput').value='';document.getElementById('waOutput').style.display='none';">Clear</button>
                 </div>
             </div>
@@ -431,11 +1154,190 @@ echo "Script tambahan sukses di-copy!"</textarea>
             <div class="card">
                 <textarea id="smsInput" placeholder="Ctrl+A dan Ctrl+C dari web pak RW yg hourly, lalu paste di sini...&#10;Contoh:&#10;2026-06-14&#9;96.683&#9;0,0&#10;2026-06-13&#9;96.683&#9;0,0&#9;98.781&#9;5,5 ..."></textarea>
                 <div class="btn-row">
-                    <button class="btn-primary" onclick="processSMS()"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Process Data SMS</button>
+                    <button class="btn-primary" onclick="processSMS()">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        Process Data SMS
+                    </button>
                     <button class="btn-ghost" onclick="document.getElementById('smsInput').value='';document.getElementById('smsOutput').style.display='none';">Clear</button>
                 </div>
             </div>
             <div id="smsOutput" style="display:none;"></div>
+        </div>
+
+        <!-- HANDOVER (Engineer) -->
+        <div id="handover" class="tab-pane">
+            <div class="page-header">
+                <h2>Handover Shift</h2>
+                <p>Tempel laporan NOC shift sebelumnya, cek metrik HUB Bogor dan VLAN 104, isi traffic TPG, lalu salin laporan yang siap dikirim.</p>
+            </div>
+            <div class="ho-layout">
+
+                <section class="ho-panel ho-noc" aria-labelledby="ho-h-noc">
+                    <div class="ho-panel-head">
+                        <h3 id="ho-h-noc"><span class="ho-idx">01</span> Laporan NOC</h3>
+                    </div>
+                    <div class="ho-body">
+                        <div class="ho-field">
+                            <label for="ho-noc">Teks laporan NOC shift sebelumnya</label>
+                            <textarea id="ho-noc" spellcheck="false" autocapitalize="off" placeholder="Tempel teks handover NOC di sini.&#10;Contoh:&#10;Laporan Handover Shift 2&#10;HUB BOGOR (HX)&#10;MAX OUT : Presentase 43.21% Traffic : 0.432 Mbps"></textarea>
+                            <p class="ho-hint">Blok VSAT, Remote Offline, ASTINET, IFORTE, MORATEL, BRICast, Sarpen CRM, dan Helpdesk CRM diabaikan saat ekstraksi.</p>
+                        </div>
+                        <div class="ho-field">
+                            <button type="button" class="btn-dark" id="ho-reparse">Ekstrak ulang</button>
+                            <p class="ho-status" id="ho-parseStatus">Belum ada teks. Nilai default dipakai.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="ho-panel ho-editor" aria-labelledby="ho-h-editor">
+                    <div class="ho-panel-head">
+                        <h3 id="ho-h-editor"><span class="ho-idx">02</span> Editor laporan</h3>
+                    </div>
+                    <div class="ho-body">
+
+                        <fieldset>
+                            <legend class="ho-label">Shift handover</legend>
+                            <div class="ho-seg" id="ho-shiftGroup" role="group" aria-label="Pilih shift handover">
+                                <button type="button" aria-pressed="false" data-shift="1">Shift 1</button>
+                                <button type="button" aria-pressed="false" data-shift="2">Shift 2</button>
+                                <button type="button" aria-pressed="true" data-shift="3">Shift 3</button>
+                            </div>
+                        </fieldset>
+
+                        <div class="ho-field">
+                            <label for="ho-date">Tanggal laporan</label>
+                            <input type="date" id="ho-date">
+                            <p class="ho-hint" id="ho-datePreview">Friday, 20 November 2026</p>
+                        </div>
+
+                        <fieldset>
+                            <legend class="ho-label">Traffic HUB Bogor (HX)</legend>
+                            <div class="ho-seg" id="ho-hubModeGroup" role="group" aria-label="Mode data HUB Bogor">
+                                <button type="button" aria-pressed="true" data-mode="auto">Auto (ikut NOC)</button>
+                                <button type="button" aria-pressed="false" data-mode="manual">Isi manual</button>
+                            </div>
+
+                            <dl class="ho-metrics" id="ho-hubAuto">
+                                <div class="ho-metric"><dt>MAX OUT</dt><span class="ho-dots" aria-hidden="true"></span><dd id="ho-autoOut">0.00% | 0.000 Mbps</dd></div>
+                                <div class="ho-metric"><dt>MAX IN</dt><span class="ho-dots" aria-hidden="true"></span><dd id="ho-autoIn">0.00% | 0.000 Mbps</dd></div>
+                                <div class="ho-metric"><dt>Availability VLAN 104</dt><span class="ho-dots" aria-hidden="true"></span><dd id="ho-autoAv">0.0000 Mbps</dd></div>
+                                <div class="ho-metric"><dt>Usage VLAN 104</dt><span class="ho-dots" aria-hidden="true"></span><dd id="ho-autoUse">0.0000 Mbps</dd></div>
+                            </dl>
+
+                            <div id="ho-hubManual" hidden>
+                                <div class="ho-field" style="margin-bottom:12px;">
+                                    <label for="ho-hubCap">Kapasitas link HUB (Mbps)</label>
+                                    <input type="number" id="ho-hubCap" value="1" min="0.01" step="0.01" inputmode="decimal">
+                                    <p class="ho-hint warn" id="ho-hubCapErr" hidden>Kapasitas harus lebih dari 0.</p>
+                                </div>
+                                <div class="ho-row2" style="margin-bottom:10px;">
+                                    <div class="ho-field">
+                                        <label for="ho-hubOut">MAX OUT (Mbps)</label>
+                                        <input type="number" id="ho-hubOut" min="0" step="0.001" inputmode="decimal" placeholder="0.000">
+                                    </div>
+                                    <div class="ho-field">
+                                        <span class="ho-label">MAX OUT (%)</span>
+                                        <output class="ho-readout" id="ho-hubOutPct" for="ho-hubOut">0.00%</output>
+                                    </div>
+                                </div>
+                                <div class="ho-row2" style="margin-bottom:10px;">
+                                    <div class="ho-field">
+                                        <label for="ho-hubIn">MAX IN (Mbps)</label>
+                                        <input type="number" id="ho-hubIn" min="0" step="0.001" inputmode="decimal" placeholder="0.000">
+                                    </div>
+                                    <div class="ho-field">
+                                        <span class="ho-label">MAX IN (%)</span>
+                                        <output class="ho-readout" id="ho-hubInPct" for="ho-hubIn">0.00%</output>
+                                    </div>
+                                </div>
+                                <div class="ho-row2">
+                                    <div class="ho-field">
+                                        <label for="ho-hubAv">Availability VLAN 104 BSI (Mbps)</label>
+                                        <input type="number" id="ho-hubAv" min="0" step="0.0001" inputmode="decimal" placeholder="0.0000">
+                                    </div>
+                                    <div class="ho-field">
+                                        <label for="ho-hubUse">Usage VLAN 104 BSI (Mbps)</label>
+                                        <input type="number" id="ho-hubUse" min="0" step="0.0001" inputmode="decimal" placeholder="0.0000">
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <fieldset>
+                            <legend class="ho-label">Traffic Internet TPG</legend>
+                            <div class="ho-field" style="margin-bottom:10px;">
+                                <label for="ho-tpgCap">Kapasitas link TPG (Mbps)</label>
+                                <input type="number" id="ho-tpgCap" value="30" min="0.01" step="0.01" inputmode="decimal">
+                                <p class="ho-hint warn" id="ho-tpgCapErr" hidden>Kapasitas harus lebih dari 0.</p>
+                            </div>
+                            <div class="ho-row2" style="margin-bottom:10px;">
+                                <div class="ho-field">
+                                    <label for="ho-tpgOut">MAX OUT Traffic (Mbps)</label>
+                                    <input type="number" id="ho-tpgOut" min="0" step="0.001" inputmode="decimal" placeholder="0.000">
+                                </div>
+                                <div class="ho-field">
+                                    <span class="ho-label">MAX OUT (%)</span>
+                                    <output class="ho-readout" id="ho-tpgOutPct" for="ho-tpgOut">0.00%</output>
+                                </div>
+                            </div>
+                            <div class="ho-row2">
+                                <div class="ho-field">
+                                    <label for="ho-tpgIn">MAX IN Traffic (Mbps)</label>
+                                    <input type="number" id="ho-tpgIn" min="0" step="0.001" inputmode="decimal" placeholder="0.000">
+                                </div>
+                                <div class="ho-field">
+                                    <span class="ho-label">MAX IN (%)</span>
+                                    <output class="ho-readout" id="ho-tpgInPct" for="ho-tpgIn">0.00%</output>
+                                </div>
+                            </div>
+                            <p class="ho-hint" style="margin-top:8px;">Persentase dihitung dari traffic dibagi kapasitas link.</p>
+                        </fieldset>
+
+                        <fieldset>
+                            <legend class="ho-label">Incident</legend>
+                            <div class="ho-field">
+                                <label for="ho-incident">Catatan incident</label>
+                                <textarea id="ho-incident" rows="4">No Incident</textarea>
+                            </div>
+                            <div class="ho-chips" role="group" aria-label="Preset incident">
+                                <button type="button" class="ho-chip" data-target="incident" data-preset="nihil">No Incident</button>
+                            </div>
+                        </fieldset>
+
+                        <fieldset>
+                            <legend class="ho-label">Action item</legend>
+                            <div class="ho-field">
+                                <label for="ho-action">Action item shift berikutnya</label>
+                                <textarea id="ho-action" rows="4">NIHIL</textarea>
+                            </div>
+                            <div class="ho-chips" role="group" aria-label="Preset action item">
+                                <button type="button" class="ho-chip" data-target="action" data-preset="nihil">NIHIL</button>
+                                <button type="button" class="ho-chip" data-target="action" data-preset="monitor">No Pending Action Item</button>
+                            </div>
+                        </fieldset>
+
+                        <div class="ho-field">
+                            <button type="button" class="btn-ghost js-ho-reset">Reset form</button>
+                            <p class="ho-hint">Mengembalikan semua isian ke pengaturan awal.</p>
+                        </div>
+
+                        <p class="ho-status" id="ho-storageWarn" hidden>Penyimpanan lokal tidak tersedia di browser ini. Isian tidak akan tersimpan setelah halaman di-refresh.</p>
+                    </div>
+                </section>
+
+                <section class="ho-panel ho-preview" aria-labelledby="ho-h-preview">
+                    <div class="ho-panel-head">
+                        <h3 id="ho-h-preview"><span class="ho-idx">03</span> Pratinjau</h3>
+                        <button type="button" class="btn-primary" id="ho-copy">Copy ke-Whatsapp</button>
+                    </div>
+                    <div class="ho-empty" id="ho-previewEmpty">
+                        <p>Belum ada metrik terbaca. Tempel laporan NOC di panel 01 atau isi manual di panel 02.</p>
+                    </div>
+                    <pre class="ho-pre" id="ho-output" hidden></pre>
+                </section>
+
+            </div>
+            <div class="ho-sr" role="status" aria-live="polite" id="ho-live"></div>
         </div>
 
     </div>
@@ -447,13 +1349,27 @@ echo "Script tambahan sukses di-copy!"</textarea>
 // TAB NAV
 // ═══════════════════════════════════════════
 const tabMeta = {
-    home:        { title:'Beranda', badge:'Overview' },
-    dashboard:   { title:'Traffic SMS Real Time', badge:'Real Time' },
-    wa_traffic:  { title:'Traffic WhatsApp', badge:'WABA' },
-    sms_traffic: { title:'Traffic SMS', badge:'TRF + DTR' }
+    home:        { title:'Beranda', badge:'Overview', section:'noc' },
+    dashboard:   { title:'Traffic SMS Real Time', badge:'Real Time', section:'noc' },
+    wa_traffic:  { title:'Traffic WhatsApp', badge:'WABA', section:'noc' },
+    sms_traffic: { title:'Traffic SMS', badge:'TRF + DTR', section:'noc' },
+    handover:    { title:'Handover Shift', badge:'Engineer', section:'engineer' }
 };
 window.currentWaData  = {};
 window.currentSmsData = {};   // { 'SMS (YYYY-MM-DD)': { trf:[24], dtr:[24] } }
+
+let activeSection = 'noc';
+let lastNocTab = 'home';
+
+function switchSection(section) {
+    activeSection = section;
+    document.querySelectorAll('.rail-item').forEach(b => {
+        b.setAttribute('aria-pressed', String(b.dataset.section === section));
+    });
+    document.getElementById('navNoc').hidden = section !== 'noc';
+    document.getElementById('navEngineer').hidden = section !== 'engineer';
+    switchTab(section === 'noc' ? lastNocTab : 'handover');
+}
 
 function switchTab(tabId, el) {
     document.querySelectorAll('.tab-pane').forEach(t=>t.classList.remove('active'));
@@ -462,6 +1378,7 @@ function switchTab(tabId, el) {
     const sEl = document.getElementById('snav-'+tabId);
     if(sEl) sEl.classList.add('active');
     const m = tabMeta[tabId]||{};
+    if((m.section||'noc') === 'noc') lastNocTab = tabId;
     document.getElementById('topbar-title').textContent = m.title||'';
     document.getElementById('topbar-badge').textContent = m.badge||'';
     document.querySelector('.content').scrollTop = 0;
@@ -469,11 +1386,11 @@ function switchTab(tabId, el) {
 }
 
 function toggleSidebar() {
-    document.querySelector('.sidebar').classList.toggle('open');
+    document.getElementById('navShell').classList.toggle('open');
     document.getElementById('sidebarOverlay').classList.toggle('open');
 }
 function closeSidebar() {
-    document.querySelector('.sidebar').classList.remove('open');
+    document.getElementById('navShell').classList.remove('open');
     document.getElementById('sidebarOverlay').classList.remove('open');
 }
 
@@ -484,8 +1401,8 @@ function showToast(msg, type='success') {
     const c=document.getElementById('toast-container');
     const t=document.createElement('div'); t.className='toast';
     const ic = type==='success'
-        ? '<svg width="14" height="14" fill="none" stroke="#10B981" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>'
-        : '<svg width="14" height="14" fill="none" stroke="#EF4444" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
+        ? '<svg width="14" height="14" fill="none" stroke="#16A34A" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>'
+        : '<svg width="14" height="14" fill="none" stroke="#DC2626" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
     t.innerHTML=`${ic}<span>${msg}</span>`;
     c.appendChild(t);
     setTimeout(()=>{t.classList.add('fade-out');setTimeout(()=>t.remove(),350);},3000);
@@ -507,7 +1424,7 @@ function copyPuTTYCommand(){ copyText(document.getElementById('puttyCommand').va
 function drawLineChart(canvasId, datasets, labels) {
     const canvas=document.getElementById(canvasId); if(!canvas) return;
     const dpr=window.devicePixelRatio||1;
-    const W=canvas.offsetWidth, H=canvas.offsetHeight||170;
+    const W=canvas.offsetWidth, H=canvas.offsetHeight||160;
     canvas.width=W*dpr; canvas.height=H*dpr;
     const ctx=canvas.getContext('2d'); ctx.scale(dpr,dpr);
     const PAD={top:10,right:14,bottom:28,left:50};
@@ -541,7 +1458,7 @@ function drawLineChart(canvasId, datasets, labels) {
 function drawBarChart(canvasId, data, labels, color) {
     const canvas=document.getElementById(canvasId); if(!canvas) return;
     const dpr=window.devicePixelRatio||1;
-    const W=canvas.offsetWidth, H=canvas.offsetHeight||170;
+    const W=canvas.offsetWidth, H=canvas.offsetHeight||160;
     canvas.width=W*dpr; canvas.height=H*dpr;
     const ctx=canvas.getContext('2d'); ctx.scale(dpr,dpr);
     const PAD={top:10,right:14,bottom:28,left:50};
@@ -656,8 +1573,8 @@ function processSMS() {
 // RENDER TRAFFIC OUTPUT
 // Support: dataObj values can be { trf, dtr } (SMS) or { trf, dtr:null } (WA)
 // ═══════════════════════════════════════════
-const PALETTE     = ['#6366F1','#10B981','#F59E0B','#EF4444','#7C3AED','#0891B2','#E11D48'];
-const PALETTE_FILL= ['rgba(99,102,241,0.08)','rgba(16,185,129,0.08)','rgba(245,158,11,0.08)','rgba(239,68,68,0.08)','rgba(124,58,237,0.08)','rgba(8,145,178,0.08)','rgba(225,29,72,0.08)'];
+const PALETTE     = ['#3B82F6','#16A34A','#D97706','#DC2626','#7C3AED','#0891B2','#E11D48'];
+const PALETTE_FILL= ['rgba(59,130,246,0.08)','rgba(22,163,74,0.08)','rgba(217,119,6,0.08)','rgba(220,38,38,0.08)','rgba(124,58,237,0.08)','rgba(8,145,178,0.08)','rgba(225,29,72,0.08)'];
 const BTN_CLASSES = ['btn-primary','btn-success','btn-amber','btn-rose','btn-purple','btn-cyan','btn-dark'];
 
 function renderTrafficOutput(containerId, dataObj, type, title) {
@@ -746,12 +1663,12 @@ function renderTrafficOutput(containerId, dataObj, type, title) {
 
     let chartsHtml=`<div class="two-col">
         <div class="chart-card">
-            <div class="chart-title"><span style="background:#6366F1;width:7px;height:7px;border-radius:50%;display:inline-block;"></span>Tren TRF Per Jam</div>
+            <div class="chart-title"><span style="background:#3B82F6;width:6px;height:6px;border-radius:50%;display:inline-block;flex-shrink:0;"></span>Tren TRF Per Jam</div>
             <div class="chart-wrap"><canvas id="${chartLineId}" class="chart-canvas"></canvas></div>
             <div class="chart-legend">${dateKeys.map((dk,i)=>`<div class="legend-item"><span class="legend-dot" style="background:${PALETTE[i%PALETTE.length]};"></span>${dk}</div>`).join('')}</div>
         </div>
         <div class="chart-card">
-            <div class="chart-title"><span style="background:#F59E0B;width:7px;height:7px;border-radius:50%;display:inline-block;"></span>Volume Per Jam (Gabungan)</div>
+            <div class="chart-title"><span style="background:#D97706;width:6px;height:6px;border-radius:50%;display:inline-block;flex-shrink:0;"></span>Volume Per Jam (Gabungan)</div>
             <div class="chart-wrap"><canvas id="${chartBarId}" class="chart-canvas"></canvas></div>
         </div>
     </div>`;
@@ -803,7 +1720,7 @@ function renderTrafficOutput(containerId, dataObj, type, title) {
 
     requestAnimationFrame(()=>{
         drawLineChart(chartLineId, datasetsJson, labels);
-        drawBarChart(chartBarId, peakHoursData, labels, 'rgba(245,158,11,0.75)');
+        drawBarChart(chartBarId, peakHoursData, labels, 'rgba(217,119,6,0.75)');
     });
 }
 
@@ -910,7 +1827,7 @@ function generateSummary() {
     const mdmHourly=[],jatisHourly=[];
     for(let i=0;i<24;i++){let mv=0;for(let op in dataMap['MDM']) mv+=dataMap['MDM'][op][i];mdmHourly.push(mv);jatisHourly.push(dataMap['JATIS']['Telkomsel'][i]);}
     const lbls=Array.from({length:24},(_,i)=>`${String(i).padStart(2,'0')}.00`);
-    requestAnimationFrame(()=>{drawLineChart('rtChart',[{label:'MDM',data:mdmHourly,color:'#6366F1',fillColor:'rgba(99,102,241,0.09)'},{label:'JATIS',data:jatisHourly,color:'#10B981',fillColor:'rgba(16,185,129,0.07)'}],lbls);});
+    requestAnimationFrame(()=>{drawLineChart('rtChart',[{label:'MDM',data:mdmHourly,color:'#3B82F6',fillColor:'rgba(59,130,246,0.09)'},{label:'JATIS',data:jatisHourly,color:'#16A34A',fillColor:'rgba(22,163,74,0.07)'}],lbls);});
 
     const today=new Date();
     const dateStr=today.toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'});
@@ -944,7 +1861,7 @@ function generateSummary() {
 
     let provList=['Telkomsel','Indosat','XL','3 (Hutchison)','Smartfren','Axis','Unknown'];
     html+=`<div class="table-wrap" style="max-width:520px;"><table>
-        <tr><th colspan="4" class="text-left excel-cell" style="background:#F5F5FF;color:var(--accent);padding:10px 13px;">Summary Trafik SMS ${today.getFullYear()}</th></tr>
+        <tr><th colspan="4" class="text-left excel-cell" style="background:#EFF6FF;color:var(--accent);padding:10px 13px;">Summary Trafik SMS ${today.getFullYear()}</th></tr>
         <tr><th class="excel-cell">Provider</th><th class="excel-cell">MDM</th><th class="excel-cell">JATIS</th><th class="excel-cell">TOTAL</th></tr>`;
     provList.forEach(prov=>{
         let mv=totMdm[prov]||0, jv=(prov==='Telkomsel')?sumJatis:0;
@@ -983,6 +1900,363 @@ function copyDataOnly(){
     for(let i=0;i<24;i++){let row=[];oprs.forEach(op=>row.push(dm['MDM'][op][i]||0));row.push(dm['JATIS']['Telkomsel'][i]||0);rows.push(row.join('\t'));}
     copyText(rows.join('\n'),'Nilai provider');
 }
+
+// ═══════════════════════════════════════════
+// HANDOVER SHIFT (modul Engineer)
+// ═══════════════════════════════════════════
+(() => {
+    const KEY = 'handover-generator-v1';
+    const el = {};
+    ['noc','date','hubCap','hubOut','hubIn','hubAv','hubUse','tpgCap','tpgOut','tpgIn','incident','action',
+     'parseStatus','datePreview','hubAuto','hubManual','hubOutPct','hubInPct','hubCapErr','tpgCapErr',
+     'tpgOutPct','tpgInPct','autoOut','autoIn','autoAv','autoUse','output','previewEmpty','live',
+     'storageWarn','copy'].forEach(k => { el[k] = document.getElementById('ho-' + k); });
+
+    const state = { shift: 3, hubMode: 'auto', lastAutoShift: 0 };
+    const parsed = { outPct: null, outMbps: null, inPct: null, inMbps: null, av: null, use: null, srcShift: null };
+
+    const PRESETS = {
+        incident: {
+            nihil: 'No Incident'
+        },
+        action: {
+            nihil: 'NIHIL',
+            monitor: 'No Pending action item, lanjutkan monitoring rutin backhaul dan perangkat.'
+        }
+    };
+
+    // shortcut: blok diabaikan mulai dari baris keyword dan lanjut lagi di header HUB/VLAN/Traffic/Incident/Action berikutnya, upgrade kalau template NOC berubah
+    const DROP = /(VSAT|Remote\s+Offline|ASTINET|IFORTE|MORATEL|BRICast|Sarpen|Helpdesk)/i;
+    const RESUME = /^\s*(HUB|VLAN|Traffic\s+Internet|Incident|Action)/i;
+
+    const RX = {
+        shift: /Laporan\s+Handover\s+Shift\s*(\d+)/i,
+        outPct: /MAX\s*OUT\s*:\s*Presentase\s*([\d.]+)%?/i,
+        outMbps: /MAX\s*OUT\s*:[\s\S]*?Traffic\s*:\s*([\d.]+)\s*Mbps/i,
+        inPct: /MAX\s*IN\s*:\s*Presentase\s*([\d.]+)%?/i,
+        inMbps: /MAX\s*IN\s*:[\s\S]*?Traffic\s*:\s*([\d.]+)\s*Mbps/i,
+        av: /Availability\s*:\s*VLAN\s*104\s*BSI\s*:\s*([\d.]+)\s*Mbps/i,
+        use: /Usage\s*:\s*VLAN\s*104\s*BSI\s*:\s*([\d.]+)\s*Mbps/i
+    };
+
+    const todayISO = () => new Date().toLocaleDateString('sv-SE');
+    const nextShift = n => (n % 3) + 1;
+    const num = input => {
+        const v = parseFloat(String(input.value).replace(',', '.'));
+        return Number.isFinite(v) ? v : 0;
+    };
+    const fmt = (n, d) => Number.isFinite(n) ? n.toFixed(d) : (0).toFixed(d);
+
+    function stripIrrelevant(text) {
+        const kept = [];
+        let dropping = false;
+        for (const line of text.split(/\r?\n/)) {
+            if (DROP.test(line)) { dropping = true; continue; }
+            if (dropping) {
+                if (!RESUME.test(line)) continue;
+                dropping = false;
+            }
+            kept.push(line);
+        }
+        return kept.join('\n');
+    }
+
+    function parseNoc(text) {
+        const clean = stripIrrelevant(text);
+        const grab = re => {
+            const m = clean.match(re);
+            return m ? parseFloat(m[1]) : null;
+        };
+        const mShift = clean.match(RX.shift);
+        return {
+            srcShift: mShift ? parseInt(mShift[1], 10) : null,
+            outPct: grab(RX.outPct),
+            outMbps: grab(RX.outMbps),
+            inPct: grab(RX.inPct),
+            inMbps: grab(RX.inMbps),
+            av: grab(RX.av),
+            use: grab(RX.use)
+        };
+    }
+
+    function formatDate(iso) {
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(iso || '')) return iso || '-';
+        return new Date(iso + 'T00:00:00').toLocaleDateString('en-GB', {
+            weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+        });
+    }
+
+    const pct = (mbps, cap) => cap > 0 ? (mbps / cap) * 100 : 0;
+
+    function report() {
+        const auto = state.hubMode === 'auto';
+        const hubCap = num(el.hubCap);
+        const outMbps = auto ? (parsed.outMbps ?? 0) : num(el.hubOut);
+        const inMbps = auto ? (parsed.inMbps ?? 0) : num(el.hubIn);
+        const outPct = auto ? (parsed.outPct ?? 0) : pct(outMbps, hubCap);
+        const inPct = auto ? (parsed.inPct ?? 0) : pct(inMbps, hubCap);
+        const av = auto ? (parsed.av ?? 0) : num(el.hubAv);
+        const use = auto ? (parsed.use ?? 0) : num(el.hubUse);
+
+        const cap = num(el.tpgCap);
+        const tOut = num(el.tpgOut);
+        const tIn = num(el.tpgIn);
+
+        return [
+            `*HANDOVER SHIFT ${state.shift}*`,
+            formatDate(el.date.value),
+            '',
+            'Traffic Utilisasi HUB Bogor',
+            'HUB BOGOR :',
+            'MAX OUT :',
+            `Presentase\t${fmt(outPct, 2)}%`,
+            `Traffic :\t${fmt(outMbps, 3)} Mbps`,
+            'MAX IN :',
+            `Presentase\t${fmt(inPct, 2)}%`,
+            `Traffic :\t${fmt(inMbps, 3)} Mbps`,
+            '',
+            'Availability :',
+            `VLAN 104 BSI :\t${fmt(av, 4)} Mbps`,
+            'Usage :',
+            `VLAN 104 BSI :\t${fmt(use, 4)} Mbps`,
+            '',
+            'Traffic Internet TPG',
+            'MAX OUT:',
+            `Presentase ${fmt(pct(tOut, cap), 2)}%`,
+            `Traffic : ${fmt(tOut, 3)} Mbps`,
+            '',
+            'MAX IN:',
+            `Presentase ${fmt(pct(tIn, cap), 2)}%`,
+            `Traffic : ${fmt(tIn, 3)} Mbps`,
+            '',
+            '*INCIDENT*',
+            el.incident.value.trim() || 'NIHIL',
+            '',
+            '*ACTION ITEM*',
+            el.action.value.trim() || 'NIHIL'
+        ].join('\n');
+    }
+
+    function hasData() {
+        if (el.noc.value.trim() || el.tpgOut.value || el.tpgIn.value) return true;
+        if (state.hubMode === 'manual') {
+            return Boolean(el.hubOut.value || el.hubIn.value || el.hubAv.value || el.hubUse.value);
+        }
+        return ['outPct', 'outMbps', 'inPct', 'inMbps', 'av', 'use'].some(k => parsed[k] !== null);
+    }
+
+    function render() {
+        const auto = state.hubMode === 'auto';
+        el.hubAuto.hidden = !auto;
+        el.hubManual.hidden = auto;
+
+        document.querySelectorAll('#ho-shiftGroup button').forEach(b => {
+            b.setAttribute('aria-pressed', String(Number(b.dataset.shift) === state.shift));
+        });
+        document.querySelectorAll('#ho-hubModeGroup button').forEach(b => {
+            b.setAttribute('aria-pressed', String(b.dataset.mode === state.hubMode));
+        });
+
+        el.autoOut.textContent = `${fmt(parsed.outPct ?? 0, 2)}% | ${fmt(parsed.outMbps ?? 0, 3)} Mbps`;
+        el.autoIn.textContent = `${fmt(parsed.inPct ?? 0, 2)}% | ${fmt(parsed.inMbps ?? 0, 3)} Mbps`;
+        el.autoAv.textContent = `${fmt(parsed.av ?? 0, 4)} Mbps`;
+        el.autoUse.textContent = `${fmt(parsed.use ?? 0, 4)} Mbps`;
+
+        const hubCap = num(el.hubCap);
+        const hubCapBad = el.hubCap.value !== '' && hubCap <= 0;
+        el.hubCapErr.hidden = !hubCapBad;
+        el.hubOutPct.textContent = hubCapBad ? '-' : `${fmt(pct(num(el.hubOut), hubCap), 2)}%`;
+        el.hubInPct.textContent = hubCapBad ? '-' : `${fmt(pct(num(el.hubIn), hubCap), 2)}%`;
+
+        const cap = num(el.tpgCap);
+        const capBad = el.tpgCap.value !== '' && cap <= 0;
+        el.tpgCapErr.hidden = !capBad;
+        el.tpgOutPct.textContent = capBad ? '-' : `${fmt(pct(num(el.tpgOut), cap), 2)}%`;
+        el.tpgInPct.textContent = capBad ? '-' : `${fmt(pct(num(el.tpgIn), cap), 2)}%`;
+
+        el.datePreview.textContent = formatDate(el.date.value);
+
+        const filled = hasData();
+        el.output.hidden = !filled;
+        el.previewEmpty.hidden = filled;
+        el.output.textContent = filled ? report() : '';
+        el.copy.disabled = !filled;
+    }
+
+    function save() {
+        const data = {
+            noc: el.noc.value,
+            date: el.date.value,
+            hubMode: state.hubMode,
+            shift: state.shift,
+            hubCap: el.hubCap.value,
+            hubOut: el.hubOut.value,
+            hubIn: el.hubIn.value,
+            hubAv: el.hubAv.value,
+            hubUse: el.hubUse.value,
+            tpgCap: el.tpgCap.value,
+            tpgOut: el.tpgOut.value,
+            tpgIn: el.tpgIn.value,
+            incident: el.incident.value,
+            action: el.action.value
+        };
+        try {
+            localStorage.setItem(KEY, JSON.stringify(data));
+        } catch {
+            el.storageWarn.hidden = false;
+        }
+    }
+
+    function restore() {
+        let raw = null;
+        try { raw = localStorage.getItem(KEY); } catch { el.storageWarn.hidden = false; return; }
+        if (!raw) return;
+        try {
+            const d = JSON.parse(raw);
+            if (!d || typeof d !== 'object') return;
+            ['noc', 'hubCap', 'hubOut', 'hubIn', 'hubAv', 'hubUse', 'tpgCap', 'tpgOut', 'tpgIn', 'incident', 'action']
+                .forEach(k => { if (typeof d[k] === 'string') el[k].value = d[k]; });
+            if (/^\d{4}-\d{2}-\d{2}$/.test(d.date || '')) el.date.value = d.date;
+            if ([1, 2, 3].includes(d.shift)) state.shift = d.shift;
+            state.hubMode = d.hubMode === 'manual' ? 'manual' : 'auto';
+        } catch { /* isi localStorage rusak, pakai default */ }
+    }
+
+    function applyNoc() {
+        Object.assign(parsed, parseNoc(el.noc.value));
+
+        if (parsed.srcShift && parsed.srcShift !== state.lastAutoShift) {
+            state.lastAutoShift = parsed.srcShift;
+            state.shift = nextShift(parsed.srcShift);
+        }
+
+        const count = ['outPct', 'outMbps', 'inPct', 'inMbps', 'av', 'use'].filter(k => parsed[k] !== null).length;
+        el.parseStatus.classList.toggle('warn', count === 0);
+        el.parseStatus.textContent = parsed.srcShift
+            ? `Terdeteksi Shift ${parsed.srcShift}, handover jadi Shift ${nextShift(parsed.srcShift)}. ${count}/6 metrik terbaca.`
+            : (count ? `${count}/6 metrik terbaca. Nomor shift tidak ditemukan.` : 'Belum ada metrik yang cocok. Nilai default 0 dipakai.');
+
+        render();
+    }
+
+    function setHubMode(mode) {
+        if (mode === 'manual' && state.hubMode !== 'manual') {
+            if (!el.hubOut.value && parsed.outMbps !== null) el.hubOut.value = parsed.outMbps;
+            if (!el.hubIn.value && parsed.inMbps !== null) el.hubIn.value = parsed.inMbps;
+            if (!el.hubAv.value && parsed.av !== null) el.hubAv.value = parsed.av;
+            if (!el.hubUse.value && parsed.use !== null) el.hubUse.value = parsed.use;
+        }
+        state.hubMode = mode;
+        save();
+        render();
+    }
+
+    function legacyCopy(text) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.setAttribute('readonly', '');
+        ta.style.position = 'fixed';
+        ta.style.top = '0';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        const ok = document.execCommand('copy');
+        ta.remove();
+        if (!ok) throw new Error('copy failed');
+    }
+
+    let flashTimer = null;
+    function flashCopied() {
+        const label = el.copy.dataset.label || el.copy.textContent;
+        el.copy.dataset.label = label;
+        el.copy.textContent = 'Tersalin';
+        el.live.textContent = 'Laporan tersalin ke clipboard.';
+        showToast('Laporan handover disalin!');
+        clearTimeout(flashTimer);
+        flashTimer = setTimeout(() => { el.copy.textContent = el.copy.dataset.label || 'Salin laporan'; }, 2000);
+    }
+
+    async function copyReport() {
+        if (!hasData()) return;
+        const text = report();
+        try {
+            if (navigator.clipboard && window.isSecureContext) {
+                await navigator.clipboard.writeText(text);
+            } else {
+                legacyCopy(text);
+            }
+            flashCopied();
+        } catch {
+            try {
+                legacyCopy(text);
+                flashCopied();
+            } catch {
+                el.live.textContent = 'Gagal menyalin otomatis. Pilih teks di pratinjau lalu salin manual.';
+                showToast('Gagal menyalin','error');
+            }
+        }
+    }
+
+    function resetForm() {
+        if (!window.confirm('Reset semua isian handover ke pengaturan awal?')) return;
+        try { localStorage.removeItem(KEY); } catch { /* penyimpanan tidak tersedia */ }
+        el.noc.value = '';
+        el.date.value = todayISO();
+        el.hubCap.value = '1';
+        el.hubOut.value = '';
+        el.hubIn.value = '';
+        el.hubAv.value = '';
+        el.hubUse.value = '';
+        el.tpgCap.value = '30';
+        el.tpgOut.value = '';
+        el.tpgIn.value = '';
+        el.incident.value = 'NIHIL';
+        el.action.value = 'NIHIL';
+        state.shift = 3;
+        state.hubMode = 'auto';
+        state.lastAutoShift = 0;
+        Object.keys(parsed).forEach(k => { parsed[k] = null; });
+        applyNoc();
+        el.live.textContent = 'Form handover dikembalikan ke pengaturan awal.';
+        showToast('Form handover direset.');
+    }
+
+    function init() {
+        el.date.value = todayISO();
+        restore();
+        applyNoc();
+
+        el.noc.addEventListener('input', () => { applyNoc(); save(); });
+        el.date.addEventListener('input', () => { render(); save(); });
+        ['hubCap', 'hubOut', 'hubIn', 'hubAv', 'hubUse', 'tpgCap', 'tpgOut', 'tpgIn', 'incident', 'action'].forEach(k => {
+            el[k].addEventListener('input', () => { render(); save(); });
+        });
+
+        document.getElementById('ho-reparse').addEventListener('click', () => { applyNoc(); save(); });
+
+        document.querySelectorAll('#ho-shiftGroup button').forEach(b => {
+            b.addEventListener('click', () => { state.shift = Number(b.dataset.shift); save(); render(); });
+        });
+        document.querySelectorAll('#ho-hubModeGroup button').forEach(b => {
+            b.addEventListener('click', () => setHubMode(b.dataset.mode));
+        });
+        document.querySelectorAll('.ho-chip').forEach(chip => {
+            chip.addEventListener('click', () => {
+                const field = el[chip.dataset.target];
+                field.value = PRESETS[chip.dataset.target][chip.dataset.preset];
+                field.focus();
+                render();
+                save();
+            });
+        });
+        el.copy.addEventListener('click', copyReport);
+        document.querySelectorAll('.js-ho-reset').forEach(b => b.addEventListener('click', resetForm));
+
+        render();
+    }
+
+    init();
+})();
 </script>
 </body>
 </html>
