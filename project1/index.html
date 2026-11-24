@@ -42,164 +42,208 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* ══ NAV SHELL ══ */
-        .nav-shell { display: flex; flex-shrink: 0; }
-
-        /* ══ RAIL (icon-only sidebar) ══ */
-        .rail {
-            width: 64px;
-            background: var(--sidebar-bg);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 12px 0;
-            gap: 4px;
-            flex-shrink: 0;
-            border-right: 1px solid rgba(255,255,255,0.05);
-        }
-        .rail-brand {
-            width: 36px;
-            height: 36px;
-            background: var(--accent);
-            border-radius: var(--r-md);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 12px;
-            flex-shrink: 0;
-        }
-        .rail-brand svg { width: 18px; height: 18px; }
-
-        .rail-item {
-            position: relative;
-            width: 44px;
-            height: 44px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 3px;
-            border-radius: var(--r-md);
-            background: transparent;
-            border: 1px solid transparent;
-            color: #52525B;
-            font-size: 9px;
-            font-weight: 600;
-            letter-spacing: 0.03em;
-            cursor: pointer;
-            transition: background 0.15s, color 0.15s, border-color 0.15s;
-            white-space: nowrap;
-            padding: 0;
-            font-family: 'Inter', sans-serif;
-        }
-        .rail-item svg { width: 18px; height: 18px; flex-shrink: 0; }
-        .rail-item:hover { background: var(--sidebar-hover); color: #D4D4D8; transform: none; box-shadow: none; }
-        .rail-item[aria-pressed="true"] {
-            background: var(--sidebar-active);
-            border-color: rgba(59,130,246,0.25);
-            color: #93C5FD;
-        }
-        .rail-item:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-
-        /* Rail tooltip */
-        .rail-item::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            left: calc(100% + 10px);
-            top: 50%;
-            transform: translateY(-50%);
-            background: var(--sidebar-bg);
-            color: #E4E4E7;
-            font-size: 11px;
-            font-weight: 500;
-            padding: 4px 8px;
-            border-radius: var(--r-sm);
-            border: 1px solid rgba(255,255,255,0.08);
-            white-space: nowrap;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.15s;
-            z-index: 999;
-        }
-        .rail-item:hover::after { opacity: 1; }
-
-        /* ══ SUB-SIDEBAR ══ */
+                /* ══ UNIFIED SIDEBAR (Accordion Style) ══ */
         .sidebar {
-            width: 220px;
-            background: var(--surface);
+            width: 250px;
+            background: #111116;
             display: flex;
             flex-direction: column;
             flex-shrink: 0;
-            border-right: 1px solid var(--border);
+            border-right: 1px solid rgba(255,255,255,0.07);
+            height: 100vh;
             overflow-y: auto;
+            overflow-x: hidden;
+            transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 100;
         }
         .sidebar::-webkit-scrollbar { width: 3px; }
-        .sidebar::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 2px; }
+        .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
 
         .brand {
-            padding: 14px 16px 12px;
-            border-bottom: 1px solid var(--border);
+            padding: 16px 16px 14px;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
         }
+        .brand-logo {
+            width: 34px;
+            height: 34px;
+            background: #2563EB;
+            border-radius: var(--r-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFF;
+            flex-shrink: 0;
+            box-shadow: 0 2px 6px rgba(37,99,235,0.3);
+        }
+        .brand-logo svg { width: 18px; height: 18px; }
+        .brand-text { min-width: 0; }
         .brand-name {
-            font-size: 13px;
+            font-size: 13.5px;
             font-weight: 700;
-            color: var(--text-1);
-            letter-spacing: -0.02em;
+            color: #F4F4F5;
+            letter-spacing: -0.01em;
+            white-space: nowrap;
         }
         .brand-sub {
-            font-size: 10px;
-            color: var(--text-3);
-            letter-spacing: 0.04em;
+            font-size: 9px;
+            color: #71717A;
+            letter-spacing: 0.06em;
             text-transform: uppercase;
+            font-weight: 600;
             margin-top: 1px;
         }
 
-        .nav-section { padding: 10px 8px; flex: 1; }
-        .nav-label {
-            font-size: 10px;
-            font-weight: 600;
-            color: var(--text-3);
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            padding: 0 8px;
-            margin-bottom: 3px;
-            margin-top: 14px;
+        .nav-container {
+            padding: 12px 10px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
         }
-        .nav-label:first-child { margin-top: 0; }
+
+        .nav-divider {
+            height: 1px;
+            background: rgba(255,255,255,0.05);
+            margin: 6px 4px;
+        }
 
         .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8.5px 12px;
+            border-radius: var(--r-sm);
+            color: #A1A1AA;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.12s ease;
+            border: 1px solid transparent;
+            user-select: none;
+            min-height: unset;
+        }
+        .nav-item svg { width: 16px; height: 16px; flex-shrink: 0; color: #71717A; }
+        .nav-item:hover {
+            background: rgba(255,255,255,0.06);
+            color: #FFF;
+        }
+        .nav-item:hover svg { color: #D4D4D8; }
+        .nav-item.active {
+            background: rgba(59,130,246,0.15);
+            color: #93C5FD;
+            border-color: rgba(59,130,246,0.25);
+            font-weight: 600;
+        }
+        .nav-item.active svg { color: #60A5FA; }
+
+        /* Accordion Group */
+        .nav-group {
+            display: flex;
+            flex-direction: column;
+            border-radius: var(--r-sm);
+        }
+        .nav-group-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 12px;
+            border-radius: var(--r-sm);
+            color: #D4D4D8;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.12s ease;
+            background: transparent;
+        }
+        .nav-group-header:hover {
+            background: rgba(255,255,255,0.05);
+            color: #FFF;
+        }
+        .group-icon { width: 16px; height: 16px; flex-shrink: 0; color: #71717A; }
+        .nav-group-header:hover .group-icon { color: #D4D4D8; }
+        .group-title { flex: 1; white-space: nowrap; }
+        .group-chevron {
+            width: 14px;
+            height: 14px;
+            flex-shrink: 0;
+            color: #71717A;
+            transition: transform 0.2s ease;
+        }
+        .nav-group:not(.open) .group-chevron {
+            transform: rotate(-90deg);
+        }
+
+        .nav-sub-list {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            padding-left: 20px;
+            margin-top: 2px;
+            border-left: 1px dashed rgba(255,255,255,0.1);
+            margin-left: 19px;
+        }
+        .nav-group:not(.open) .nav-sub-list {
+            display: none;
+        }
+
+        .nav-sub-item {
             display: flex;
             align-items: center;
             gap: 9px;
             padding: 7px 10px;
             border-radius: var(--r-sm);
-            color: var(--text-2);
-            font-size: 13px;
+            color: #9CA3AF;
+            font-size: 12px;
             font-weight: 500;
             cursor: pointer;
-            transition: background 0.12s, color 0.12s;
+            transition: all 0.12s ease;
             border: 1px solid transparent;
             user-select: none;
-            margin-bottom: 1px;
+            position: relative;
         }
-        .nav-item svg { width: 15px; height: 15px; flex-shrink: 0; color: var(--text-3); }
-        .nav-item:hover { background: var(--bg); color: var(--text-1); }
-        .nav-item.active {
-            background: var(--accent-soft);
-            color: var(--accent);
-            border-color: rgba(59,130,246,0.15);
+        .nav-sub-item svg { width: 14px; height: 14px; flex-shrink: 0; color: #6B7280; }
+        .nav-sub-item:hover {
+            background: rgba(255,255,255,0.05);
+            color: #F3F4F6;
         }
-        .nav-item.active svg { color: var(--accent); }
-        .nav-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); flex-shrink: 0; margin-left: auto; display: none; }
-        .nav-item.active .nav-dot { display: block; }
+        .nav-sub-item:hover svg { color: #D1D5DB; }
+        .nav-sub-item.active {
+            background: rgba(59,130,246,0.14);
+            color: #93C5FD;
+            border-color: rgba(59,130,246,0.22);
+            font-weight: 600;
+        }
+        .nav-sub-item.active svg { color: #60A5FA; }
+
+        .nav-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: #3B82F6;
+            margin-left: auto;
+            flex-shrink: 0;
+            display: none;
+        }
+        .nav-item.active .nav-dot,
+        .nav-sub-item.active .nav-dot {
+            display: block;
+        }
 
         .sidebar-footer {
-            padding: 10px 16px;
-            border-top: 1px solid var(--border);
+            padding: 12px 16px;
+            border-top: 1px solid rgba(255,255,255,0.07);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
-        .version-tag { font-size: 11px; color: var(--text-3); }
+        .version-tag { font-size: 11px; color: #52525B; font-family: 'JetBrains Mono', monospace; }
 
-        /* ══ HAMBURGER ══ */
+        /* ══ HAMBURGER (Mobile) ══ */
         .hamburger {
             display: none;
             background: none;
@@ -215,6 +259,53 @@
         .hamburger:hover { background: var(--bg); transform: none; box-shadow: none; }
         .hamburger svg { width: 20px; height: 20px; display: block; }
 
+        /* ══ TOPBAR SIDEBAR TOGGLE & BREADCRUMB ══ */
+        .topbar-toggle-sidebar {
+            width: 32px;
+            height: 32px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: var(--r-sm);
+            color: var(--text-2);
+            cursor: pointer;
+            transition: all 0.12s;
+            min-height: unset;
+            flex-shrink: 0;
+        }
+        .topbar-toggle-sidebar:hover {
+            background: var(--surface-raised);
+            color: var(--text-1);
+            border-color: var(--border-strong);
+        }
+        .topbar-toggle-sidebar.active, .topbar-toggle-sidebar[aria-pressed="true"] {
+            background: var(--accent-soft);
+            color: var(--accent);
+            border-color: rgba(59,130,246,0.25);
+        }
+        .topbar-toggle-sidebar svg { width: 15px; height: 15px; }
+
+        .topbar-breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            min-width: 0;
+        }
+        .tb-sec {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-3);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .tb-sep {
+            color: var(--border-strong);
+            font-size: 12px;
+        }
+
         /* ══ OVERLAY ══ */
         .sidebar-overlay {
             display: none;
@@ -224,6 +315,7 @@
             z-index: 200;
         }
         .sidebar-overlay.open { display: block; }
+
 
         /* ══ MAIN ══ */
         .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
@@ -856,10 +948,27 @@
         /* ══ MOBILE ══ */
         @media (max-width: 768px) {
             .hamburger { display: flex; }
+            .topbar-toggle-sidebar { display: none; }
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100%;
+                width: 260px;
+                z-index: 300;
+                transform: translateX(-100%);
+                box-shadow: 4px 0 24px rgba(0,0,0,0.45);
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .hamburger { display: flex; }
+            .topbar-toggle-sidebar { display: none; }
+            .rail-popover { display: none !important; }
             .nav-shell {
                 position: fixed;
                 top: 0;
-                left: -300px;
+                left: -320px;
                 height: 100%;
                 width: 284px;
                 z-index: 300;
@@ -867,10 +976,17 @@
                 box-shadow: 4px 0 20px rgba(0,0,0,0.3);
             }
             .nav-shell.open { left: 0; }
-            .rail { width: 60px; padding: 10px 0; }
+            .nav-shell.sub-collapsed .sidebar {
+                width: auto !important;
+                opacity: 1 !important;
+                pointer-events: auto !important;
+                display: flex !important;
+            }
+            .rail { width: 56px; padding: 10px 0; }
             .rail-item { width: 40px; height: 40px; }
             .rail-item::after { display: none; }
             .sidebar { width: auto; flex: 1; height: 100%; }
+            .sidebar-collapse-btn { display: none; }
             .topbar { padding: 0 14px; height: 46px; gap: 8px; }
             .topbar-title { font-size: 12.5px; }
             .topbar-status span:not(.status-dot) { display: none; }
@@ -956,67 +1072,91 @@ echo "Script tambahan sukses di-copy!"</textarea>
 
 <div id="toast-container"></div>
 
-<!-- ══ NAV SHELL ══ -->
-<div class="nav-shell" id="navShell">
-    <!-- Rail: icon-only module switcher -->
-    <nav class="rail" aria-label="Pilih modul">
-        <div class="rail-brand" aria-hidden="true">
-            <svg fill="none" stroke="#fff" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+<!-- ══ UNIFIED SIDEBAR (Accordion Style) ══ -->
+<aside class="sidebar" id="sidebar">
+    <div class="brand">
+        <div class="brand-logo">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
         </div>
-        <button type="button" class="rail-item" data-section="engineer" aria-pressed="false" onclick="switchSection('engineer')" data-tooltip="Engineer">
-            <svg fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-        </button>
-        <button type="button" class="rail-item" data-section="noc" aria-pressed="true" onclick="switchSection('noc')" data-tooltip="NOC">
-            <svg fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"/></svg>
-        </button>
-    </nav>
+        <div class="brand-text">
+            <div class="brand-name">Apuy Copas</div>
+            <div class="brand-sub">NOC &amp; ENGINEER DASHBOARD</div>
+        </div>
+    </div>
 
-    <!-- Sub-sidebar with labels -->
-    <aside class="sidebar">
-        <div class="brand">
-            <div class="brand-name">Apuy Copas Copas</div>
-            <div class="brand-sub">Engineer Dashboard</div>
+    <div class="nav-container">
+        <!-- 1. BERANDA (Top item) -->
+        <div class="nav-item active" id="snav-home" onclick="switchTab('home', this)">
+            <svg fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+            <span>Beranda</span>
+            <span class="nav-dot"></span>
         </div>
-        <div class="nav-section" id="navNoc">
-            <div class="nav-label">Menu</div>
-            <div class="nav-item active" id="snav-home" onclick="switchTab('home',this)">
-                <svg fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
-                Beranda<span class="nav-dot"></span>
+
+        <div class="nav-divider"></div>
+
+        <!-- 2. ENGINEER SECTION -->
+        <div class="nav-group open" id="group-engineer">
+            <div class="nav-group-header" onclick="toggleNavGroup('group-engineer')">
+                <svg class="group-icon" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                <span class="group-title">Engineer</span>
+                <svg class="group-chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
             </div>
-            <div class="nav-label">Rekap Trafik</div>
-            <div class="nav-item" id="snav-dashboard" onclick="switchTab('dashboard',this)">
-                <svg fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-                Traffic SMS Real Time<span class="nav-dot"></span>
-            </div>
-            <div class="nav-item" id="snav-wa_traffic" onclick="switchTab('wa_traffic',this)">
-                <svg fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
-                Traffic WhatsApp<span class="nav-dot"></span>
-            </div>
-            <div class="nav-item" id="snav-sms_traffic" onclick="switchTab('sms_traffic',this)">
-                <svg fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                Traffic SMS<span class="nav-dot"></span>
-            </div>
-        </div>
-        <div class="nav-section" id="navEngineer" hidden>
-            <div class="nav-label">Engineer</div>
-            <div class="nav-item" id="snav-handover" onclick="switchTab('handover',this)">
-                <svg fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                Handover Shift<span class="nav-dot"></span>
+            <div class="nav-sub-list">
+                <div class="nav-sub-item" id="snav-handover" onclick="switchTab('handover', this)">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    <span>Handover Shift</span>
+                    <span class="nav-dot"></span>
+                </div>
             </div>
         </div>
-        <div class="sidebar-footer"><div class="version-tag">v2.3 · 2026</div></div>
-    </aside>
-</div>
+
+        <div class="nav-divider"></div>
+
+        <!-- 3. NOC SECTION -->
+        <div class="nav-group open" id="group-noc">
+            <div class="nav-group-header" onclick="toggleNavGroup('group-noc')">
+                <svg class="group-icon" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+                <span class="group-title">NOC Monitoring</span>
+                <svg class="group-chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="nav-sub-list">
+                <div class="nav-sub-item" id="snav-dashboard" onclick="switchTab('dashboard', this)">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                    <span>Traffic SMS Real Time</span>
+                    <span class="nav-dot"></span>
+                </div>
+                <div class="nav-sub-item" id="snav-wa_traffic" onclick="switchTab('wa_traffic', this)">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+                    <span>Traffic WhatsApp</span>
+                    <span class="nav-dot"></span>
+                </div>
+                <div class="nav-sub-item" id="snav-sms_traffic" onclick="switchTab('sms_traffic', this)">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                    <span>Traffic SMS</span>
+                    <span class="nav-dot"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="sidebar-footer">
+        <div class="version-tag">v2.4 · 2026</div>
+    </div>
+</aside>
 
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
-
 <!-- ══ MAIN ══ -->
 <div class="main">
     <div class="topbar">
         <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu">
             <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
         </button>
-        <span class="topbar-title" id="topbar-title">Beranda</span>
+        
+        <div class="topbar-breadcrumb">
+            <span class="tb-sec" id="topbar-sec-badge">NOC</span>
+            <span class="tb-sep">/</span>
+            <span class="topbar-title" id="topbar-title">Beranda</span>
+        </div>
         <span class="topbar-badge" id="topbar-badge">Overview</span>
         <div class="topbar-spacer"></div>
         <div class="topbar-status">
@@ -1168,7 +1308,7 @@ echo "Script tambahan sukses di-copy!"</textarea>
         <div id="handover" class="tab-pane">
             <div class="page-header">
                 <h2>Handover Shift</h2>
-                <p>Tempel laporan NOC shift sebelumnya, cek metrik HUB Bogor dan VLAN 104, isi traffic TPG, lalu salin laporan yang siap dikirim.</p>
+                <p>Langsung aje paste dari HO Noc digrup noc, spv, mager, isi traffic TPG, lalu salin laporan yang siap dikirim.</p>
             </div>
             <div class="ho-layout">
 
@@ -1178,12 +1318,12 @@ echo "Script tambahan sukses di-copy!"</textarea>
                     </div>
                     <div class="ho-body">
                         <div class="ho-field">
-                            <label for="ho-noc">Teks laporan NOC shift sebelumnya</label>
+                            <label for="ho-noc">Paste dari HO noc ye ngab</label>
                             <textarea id="ho-noc" spellcheck="false" autocapitalize="off" placeholder="Tempel teks handover NOC di sini.&#10;Contoh:&#10;Laporan Handover Shift 2&#10;HUB BOGOR (HX)&#10;MAX OUT : Presentase 43.21% Traffic : 0.432 Mbps"></textarea>
-                            <p class="ho-hint">Blok VSAT, Remote Offline, ASTINET, IFORTE, MORATEL, BRICast, Sarpen CRM, dan Helpdesk CRM diabaikan saat ekstraksi.</p>
+                            <p class="ho-hint">langsung ke paste, dicopasannya ges</p>
                         </div>
                         <div class="ho-field">
-                            <button type="button" class="btn-dark" id="ho-reparse">Ekstrak ulang</button>
+                            
                             <p class="ho-status" id="ho-parseStatus">Belum ada teks. Nilai default dipakai.</p>
                         </div>
                     </div>
@@ -1341,7 +1481,7 @@ echo "Script tambahan sukses di-copy!"</textarea>
         </div>
 
     </div>
-    <footer class="footer">&copy; 2026 <strong>Apuy Copas Copas</strong> — All rights reserved.</footer>
+    <footer class="footer">&copy; 2026 <strong>Apuy Copas</strong> — All rights reserved.</footer>
 </div>
 
 <script>
@@ -1349,50 +1489,74 @@ echo "Script tambahan sukses di-copy!"</textarea>
 // TAB NAV
 // ═══════════════════════════════════════════
 const tabMeta = {
-    home:        { title:'Beranda', badge:'Overview', section:'noc' },
-    dashboard:   { title:'Traffic SMS Real Time', badge:'Real Time', section:'noc' },
-    wa_traffic:  { title:'Traffic WhatsApp', badge:'WABA', section:'noc' },
-    sms_traffic: { title:'Traffic SMS', badge:'TRF + DTR', section:'noc' },
-    handover:    { title:'Handover Shift', badge:'Engineer', section:'engineer' }
+    home: { title: 'Beranda', badge: 'Overview', section: '' },
+    dashboard: { title: 'Traffic SMS Real Time', badge: 'Real Time', section: 'NOC' },
+    wa_traffic: { title: 'Traffic WhatsApp (WABA)', badge: 'Rekap Jam', section: 'NOC' },
+    sms_traffic: { title: 'Traffic SMS (TRF + DTR)', badge: 'Report Harian', section: 'NOC' },
+    handover: { title: 'Handover Shift', badge: 'Engineer', section: 'ENGINEER' }
 };
-window.currentWaData  = {};
-window.currentSmsData = {};   // { 'SMS (YYYY-MM-DD)': { trf:[24], dtr:[24] } }
+window.currentWaData = {};
+window.currentSmsData = {};
 
-let activeSection = 'noc';
-let lastNocTab = 'home';
-
-function switchSection(section) {
-    activeSection = section;
-    document.querySelectorAll('.rail-item').forEach(b => {
-        b.setAttribute('aria-pressed', String(b.dataset.section === section));
-    });
-    document.getElementById('navNoc').hidden = section !== 'noc';
-    document.getElementById('navEngineer').hidden = section !== 'engineer';
-    switchTab(section === 'noc' ? lastNocTab : 'handover');
+function toggleNavGroup(groupId) {
+    const grp = document.getElementById(groupId);
+    if (grp) grp.classList.toggle('open');
 }
 
 function switchTab(tabId, el) {
-    document.querySelectorAll('.tab-pane').forEach(t=>t.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-    document.getElementById(tabId).classList.add('active');
-    const sEl = document.getElementById('snav-'+tabId);
-    if(sEl) sEl.classList.add('active');
-    const m = tabMeta[tabId]||{};
-    if((m.section||'noc') === 'noc') lastNocTab = tabId;
-    document.getElementById('topbar-title').textContent = m.title||'';
-    document.getElementById('topbar-badge').textContent = m.badge||'';
-    document.querySelector('.content').scrollTop = 0;
+    document.querySelectorAll('.tab-pane').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.nav-item, .nav-sub-item').forEach(n => n.classList.remove('active'));
+    
+    const targetPane = document.getElementById(tabId);
+    if (targetPane) targetPane.classList.add('active');
+
+    const sEl = document.getElementById('snav-' + tabId);
+    if (sEl) {
+        sEl.classList.add('active');
+        const parentGroup = sEl.closest('.nav-group');
+        if (parentGroup) parentGroup.classList.add('open');
+    }
+
+    const m = tabMeta[tabId] || {};
+    const topTitle = document.getElementById('topbar-title');
+    if (topTitle) topTitle.textContent = m.title || '';
+    const topBadge = document.getElementById('topbar-badge');
+    if (topBadge) topBadge.textContent = m.badge || '';
+    const secBadge = document.getElementById('topbar-sec-badge');
+    const sepBadge = document.querySelector('.tb-sep');
+    if (secBadge) {
+        if (m.section) {
+            secBadge.textContent = m.section;
+            secBadge.style.display = 'inline';
+            if (sepBadge) sepBadge.style.display = 'inline';
+        } else {
+            secBadge.style.display = 'none';
+            if (sepBadge) sepBadge.style.display = 'none';
+        }
+    }
+
+    const contentEl = document.querySelector('.content');
+    if (contentEl) contentEl.scrollTop = 0;
     closeSidebar();
 }
 
 function toggleSidebar() {
-    document.getElementById('navShell').classList.toggle('open');
-    document.getElementById('sidebarOverlay').classList.toggle('open');
+    const sb = document.getElementById('sidebar');
+    const ov = document.getElementById('sidebarOverlay');
+    if (sb) sb.classList.toggle('open');
+    if (ov) ov.classList.toggle('open');
 }
+
 function closeSidebar() {
-    document.getElementById('navShell').classList.remove('open');
-    document.getElementById('sidebarOverlay').classList.remove('open');
+    const sb = document.getElementById('sidebar');
+    const ov = document.getElementById('sidebarOverlay');
+    if (sb) sb.classList.remove('open');
+    if (ov) ov.classList.remove('open');
 }
+
+window.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeSidebar();
+});
 
 // ═══════════════════════════════════════════
 // TOAST & COPY UTIL
@@ -1925,57 +2089,36 @@ function copyDataOnly(){
         }
     };
 
-    // shortcut: blok diabaikan mulai dari baris keyword dan lanjut lagi di header HUB/VLAN/Traffic/Incident/Action berikutnya, upgrade kalau template NOC berubah
-    const DROP = /(VSAT|Remote\s+Offline|ASTINET|IFORTE|MORATEL|BRICast|Sarpen|Helpdesk)/i;
-    const RESUME = /^\s*(HUB|VLAN|Traffic\s+Internet|Incident|Action)/i;
-
-    const RX = {
-        shift: /Laporan\s+Handover\s+Shift\s*(\d+)/i,
-        outPct: /MAX\s*OUT\s*:\s*Presentase\s*([\d.]+)%?/i,
-        outMbps: /MAX\s*OUT\s*:[\s\S]*?Traffic\s*:\s*([\d.]+)\s*Mbps/i,
-        inPct: /MAX\s*IN\s*:\s*Presentase\s*([\d.]+)%?/i,
-        inMbps: /MAX\s*IN\s*:[\s\S]*?Traffic\s*:\s*([\d.]+)\s*Mbps/i,
-        av: /Availability\s*:\s*VLAN\s*104\s*BSI\s*:\s*([\d.]+)\s*Mbps/i,
-        use: /Usage\s*:\s*VLAN\s*104\s*BSI\s*:\s*([\d.]+)\s*Mbps/i
-    };
-
     const todayISO = () => new Date().toLocaleDateString('sv-SE');
     const nextShift = n => (n % 3) + 1;
     const num = input => {
+        if (!input) return 0;
         const v = parseFloat(String(input.value).replace(',', '.'));
         return Number.isFinite(v) ? v : 0;
     };
     const fmt = (n, d) => Number.isFinite(n) ? n.toFixed(d) : (0).toFixed(d);
 
-    function stripIrrelevant(text) {
-        const kept = [];
-        let dropping = false;
-        for (const line of text.split(/\r?\n/)) {
-            if (DROP.test(line)) { dropping = true; continue; }
-            if (dropping) {
-                if (!RESUME.test(line)) continue;
-                dropping = false;
-            }
-            kept.push(line);
-        }
-        return kept.join('\n');
-    }
+    function parseNoc(rawText) {
+        if (!rawText) return { srcShift: null, outPct: null, outMbps: null, inPct: null, inMbps: null, av: null, use: null };
+        // Normalisasi teks: hilangkan formatting markdown WhatsApp (*, _, ~) agar tidak menghalangi regex
+        const text = rawText.replace(/[*_~]/g, '');
 
-    function parseNoc(text) {
-        const clean = stripIrrelevant(text);
         const grab = re => {
-            const m = clean.match(re);
-            return m ? parseFloat(m[1]) : null;
+            const m = text.match(re);
+            if (!m) return null;
+            const val = parseFloat(m[1].replace(',', '.'));
+            return Number.isFinite(val) ? val : null;
         };
-        const mShift = clean.match(RX.shift);
+
+        const mShift = text.match(/(?:Laporan\s+)?(?:Handover\s+)?Shift\s*(\d+)/i);
         return {
             srcShift: mShift ? parseInt(mShift[1], 10) : null,
-            outPct: grab(RX.outPct),
-            outMbps: grab(RX.outMbps),
-            inPct: grab(RX.inPct),
-            inMbps: grab(RX.inMbps),
-            av: grab(RX.av),
-            use: grab(RX.use)
+            outPct: grab(/MAX\s*OUT\s*:?[\s\S]*?P(?:re|er)sentase\s*:?\s*([\d.,]+)\s*%?/i),
+            outMbps: grab(/MAX\s*OUT\s*:?[\s\S]*?Traffic\s*:?\s*([\d.,]+)\s*Mbps/i),
+            inPct: grab(/MAX\s*IN\s*:?[\s\S]*?P(?:re|er)sentase\s*:?\s*([\d.,]+)\s*%?/i),
+            inMbps: grab(/MAX\s*IN\s*:?[\s\S]*?Traffic\s*:?\s*([\d.,]+)\s*Mbps/i),
+            av: grab(/Avail(?:ability)?\s*:?[\s\S]*?VLAN\s*104(?:\s*BSI)?\s*:?\s*([\d.,]+)\s*Mbps/i),
+            use: grab(/Usage\s*:?[\s\S]*?VLAN\s*104(?:\s*BSI)?\s*:?\s*([\d.,]+)\s*Mbps/i)
         };
     }
 
@@ -2227,12 +2370,13 @@ function copyDataOnly(){
         applyNoc();
 
         el.noc.addEventListener('input', () => { applyNoc(); save(); });
+        el.noc.addEventListener('paste', () => { setTimeout(() => { applyNoc(); save(); }, 15); });
+        el.noc.addEventListener('change', () => { applyNoc(); save(); });
+
         el.date.addEventListener('input', () => { render(); save(); });
         ['hubCap', 'hubOut', 'hubIn', 'hubAv', 'hubUse', 'tpgCap', 'tpgOut', 'tpgIn', 'incident', 'action'].forEach(k => {
-            el[k].addEventListener('input', () => { render(); save(); });
+            if (el[k]) el[k].addEventListener('input', () => { render(); save(); });
         });
-
-        document.getElementById('ho-reparse').addEventListener('click', () => { applyNoc(); save(); });
 
         document.querySelectorAll('#ho-shiftGroup button').forEach(b => {
             b.addEventListener('click', () => { state.shift = Number(b.dataset.shift); save(); render(); });
@@ -2243,13 +2387,15 @@ function copyDataOnly(){
         document.querySelectorAll('.ho-chip').forEach(chip => {
             chip.addEventListener('click', () => {
                 const field = el[chip.dataset.target];
-                field.value = PRESETS[chip.dataset.target][chip.dataset.preset];
-                field.focus();
-                render();
-                save();
+                if (field && PRESETS[chip.dataset.target]) {
+                    field.value = PRESETS[chip.dataset.target][chip.dataset.preset];
+                    field.focus();
+                    render();
+                    save();
+                }
             });
         });
-        el.copy.addEventListener('click', copyReport);
+        if (el.copy) el.copy.addEventListener('click', copyReport);
         document.querySelectorAll('.js-ho-reset').forEach(b => b.addEventListener('click', resetForm));
 
         render();
