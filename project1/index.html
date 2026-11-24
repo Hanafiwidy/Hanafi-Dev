@@ -1367,13 +1367,13 @@ echo "Script tambahan sukses di-copy!"</textarea>
                             <div id="ho-hubManual" hidden>
                                 <div class="ho-field" style="margin-bottom:12px;">
                                     <label for="ho-hubCap">Kapasitas link HUB (Mbps)</label>
-                                    <input type="number" id="ho-hubCap" value="1" min="0.01" step="0.01" inputmode="decimal">
+                                    <input type="text" id="ho-hubCap" value="1" inputmode="decimal">
                                     <p class="ho-hint warn" id="ho-hubCapErr" hidden>Kapasitas harus lebih dari 0.</p>
                                 </div>
                                 <div class="ho-row2" style="margin-bottom:10px;">
                                     <div class="ho-field">
                                         <label for="ho-hubOut">MAX OUT (Mbps)</label>
-                                        <input type="number" id="ho-hubOut" min="0" step="0.001" inputmode="decimal" placeholder="0.000">
+                                        <input type="text" id="ho-hubOut" inputmode="decimal" placeholder="0.000">
                                     </div>
                                     <div class="ho-field">
                                         <span class="ho-label">MAX OUT (%)</span>
@@ -1383,7 +1383,7 @@ echo "Script tambahan sukses di-copy!"</textarea>
                                 <div class="ho-row2" style="margin-bottom:10px;">
                                     <div class="ho-field">
                                         <label for="ho-hubIn">MAX IN (Mbps)</label>
-                                        <input type="number" id="ho-hubIn" min="0" step="0.001" inputmode="decimal" placeholder="0.000">
+                                        <input type="text" id="ho-hubIn" inputmode="decimal" placeholder="0.000">
                                     </div>
                                     <div class="ho-field">
                                         <span class="ho-label">MAX IN (%)</span>
@@ -1393,11 +1393,11 @@ echo "Script tambahan sukses di-copy!"</textarea>
                                 <div class="ho-row2">
                                     <div class="ho-field">
                                         <label for="ho-hubAv">Availability VLAN 104 BSI (Mbps)</label>
-                                        <input type="number" id="ho-hubAv" min="0" step="0.0001" inputmode="decimal" placeholder="0.0000">
+                                        <input type="text" id="ho-hubAv" inputmode="decimal" placeholder="0.0000">
                                     </div>
                                     <div class="ho-field">
                                         <label for="ho-hubUse">Usage VLAN 104 BSI (Mbps)</label>
-                                        <input type="number" id="ho-hubUse" min="0" step="0.0001" inputmode="decimal" placeholder="0.0000">
+                                        <input type="text" id="ho-hubUse" inputmode="decimal" placeholder="0.0000">
                                     </div>
                                 </div>
                             </div>
@@ -1407,13 +1407,13 @@ echo "Script tambahan sukses di-copy!"</textarea>
                             <legend class="ho-label">Traffic Internet TPG</legend>
                             <div class="ho-field" style="margin-bottom:10px;">
                                 <label for="ho-tpgCap">Kapasitas link TPG (Mbps)</label>
-                                <input type="number" id="ho-tpgCap" value="30" min="0.01" step="0.01" inputmode="decimal">
+                                <input type="text" id="ho-tpgCap" value="30" inputmode="decimal">
                                 <p class="ho-hint warn" id="ho-tpgCapErr" hidden>Kapasitas harus lebih dari 0.</p>
                             </div>
                             <div class="ho-row2" style="margin-bottom:10px;">
                                 <div class="ho-field">
                                     <label for="ho-tpgOut">MAX OUT Traffic (Mbps)</label>
-                                    <input type="number" id="ho-tpgOut" min="0" step="0.001" inputmode="decimal" placeholder="0.000">
+                                    <input type="text" id="ho-tpgOut" inputmode="decimal" placeholder="0.000">
                                 </div>
                                 <div class="ho-field">
                                     <span class="ho-label">MAX OUT (%)</span>
@@ -1423,7 +1423,7 @@ echo "Script tambahan sukses di-copy!"</textarea>
                             <div class="ho-row2">
                                 <div class="ho-field">
                                     <label for="ho-tpgIn">MAX IN Traffic (Mbps)</label>
-                                    <input type="number" id="ho-tpgIn" min="0" step="0.001" inputmode="decimal" placeholder="0.000">
+                                    <input type="text" id="ho-tpgIn" inputmode="decimal" placeholder="0.000">
                                 </div>
                                 <div class="ho-field">
                                     <span class="ho-label">MAX IN (%)</span>
@@ -2374,7 +2374,20 @@ function copyDataOnly(){
         el.noc.addEventListener('change', () => { applyNoc(); save(); });
 
         el.date.addEventListener('input', () => { render(); save(); });
-        ['hubCap', 'hubOut', 'hubIn', 'hubAv', 'hubUse', 'tpgCap', 'tpgOut', 'tpgIn', 'incident', 'action'].forEach(k => {
+        ['hubCap', 'hubOut', 'hubIn', 'hubAv', 'hubUse', 'tpgCap', 'tpgOut', 'tpgIn'].forEach(k => {
+            if (el[k]) {
+                el[k].addEventListener('input', () => {
+                    if (el[k].value.includes(',')) {
+                        const pos = el[k].selectionStart;
+                        el[k].value = el[k].value.replace(/,/g, '.');
+                        if (pos !== null) el[k].setSelectionRange(pos, pos);
+                    }
+                    render();
+                    save();
+                });
+            }
+        });
+        ['incident', 'action'].forEach(k => {
             if (el[k]) el[k].addEventListener('input', () => { render(); save(); });
         });
 
